@@ -1,0 +1,38 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 14/01/2026 16:16:56
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Part 4
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 14/01/2026
+00000000                             5  * Description: Part 4
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:                  ; first instruction of program
+00001000                             9      
+00001000  43F9 0000101C             10      LEA text, A1            ; Load address of text into A1
+00001006  303C 0004                 11      MOVE #4, D0             ; Load immediate value (4) into D0
+0000100A  4E4F                      12      TRAP #15                ; Execute TRAP (Output D0 to console)
+0000100C                            13      
+0000100C  303C 000E                 14      MOVE #14, D0            ; Load immediate value (14) into D0
+00001010  4E4F                      15      TRAP #15                ; Execute TRAP (Output D0 to console)
+00001012                            16      
+00001012  303C 0003                 17      MOVE #3, D0             ; Load immediate value (3) into D0
+00001016  4E4F                      18      TRAP #15                ; Execute TRAP (Output D0 to console)
+00001018                            19      
+00001018  FFFF FFFF                 20      SIMHALT             ; halt simulator
+0000101C                            21  
+0000101C= 44 61 74 61 20 52 ...     22  text:   dc.b 'Data Register: ',0    ; Define the string 'Data Register:'
+0000102C                            23  
+0000102C                            24      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000
+TEXT                101C
