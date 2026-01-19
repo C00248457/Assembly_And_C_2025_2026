@@ -1,0 +1,62 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 19/01/2026 16:39:57
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 02
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 19/01/2026
+00000000                             5  * Description: Practical 2 Part 4
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:                  ; first instruction of program
+00001000                             9  
+00001000  21FC 00000101 2000        10      MOVE.L  #$101,  $2000   ; move hex value into memory location $2000
+00001008  11FC 0004 2010            11      MOVE.B  #%100,  $2010   ; move binary value into memory location $2010
+0000100E  31FC 0064 2020            12      MOVE.W  #100,   $2020   ; move decimal value into memory location $2020
+00001014                            13      
+00001014  21FC 0000000A 2030        14      MOVE.L  #%1010, $2030   ; move binary value into memory location $2030
+0000101C  11FC 0010 2040            15      MOVE.B  #$10,  $2040   ; move hex value into memory location $2040
+00001022  31FC 0001 2050            16      MOVE.W  #1,     $2050   ; move decimal value into memory location $2050
+00001028                            17      
+00001028  21FC 000003E9 2070        18      MOVE.L  #1001,  $2070   ; move decimal value into memory location $2070
+00001030  11FC 0010 2080            19      MOVE.B  #$10,   $2080   ; move hex value into memory location $2080
+00001036  31FC 000B 2090            20      MOVE.W  #%1011, $2090   ; move binary value into memory location $2090
+0000103C                            21      
+0000103C  21FC 00000456 3020        22      MOVE.L  #1110,  $3020   ; move decimal value into memory location $3020
+00001044  11FC 0011 3030            23      MOVE.B  #$11, $3030   ; move hex value into memory location $3030
+0000104A  31FC 000F 3040            24      MOVE.W  #%1111, $3040   ; move binary value into memory location $3040
+00001050                            25  
+00001050  21F8 2030 2060            26      MOVE.L  $2030,  $2060   ; overwrite (currently empty) $2060 with value in $2030
+00001056  11F8 2070 3000            27      MOVE.B  $2070,  $3000   ; overwrite (currently empty) $3000 with value in $2070
+0000105C  31F8 2090 3010            28      MOVE.W  $2090,  $3010   ; overwrite (currently empty) $3010 with value in $2090
+00001062                            29      
+00001062  2038 2000                 30      MOVE.L  $2000,  D0      ; moves hex value in memory location $2000 to data register D0
+00001066  1238 2010                 31      MOVE.B  $2010,  D1      ; moves binary value in memory location $2010 to data register D1
+0000106A  3438 2020                 32      MOVE.W  $2020,  D2      ; moves decimal value in memory location $2020 to data register D2
+0000106E                            33      
+0000106E  2602                      34      MOVE.L  D2,     D3      ; D2 data to D3
+00001070  1838 2040                 35      MOVE.B  $2040,  D4      ; moves $2040 into D4
+00001074  3A38 2050                 36      MOVE.W  $2050,  D5      ; moves $2050 into D5
+00001078                            37      
+00001078  2C05                      38      MOVE.L  D5,     D6      ; D5 data to D6
+0000107A  1E04                      39      MOVE.B  D4,     D7      ; D4 to D7
+0000107C  3005                      40      MOVE.W  D5,     D0      ; overwrite data in D0 with data in data register 5
+0000107E                            41      
+0000107E                            42      
+0000107E                            43                              ; originally used memory locations $1000, $1010, $1020
+0000107E                            44                              ; didn't work, got error
+0000107E                            45                              ; possibly reserved memory locations?
+0000107E                            46  
+0000107E  FFFF FFFF                 47      SIMHALT                 ; halt simulator
+00001082                            48  
+00001082                            49      END    START            ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000

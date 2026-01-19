@@ -1,0 +1,37 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 19/01/2026 16:05:04
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 02
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 19/01/2026
+00000000                             5  * Description: Practical 2 Part 2
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:                  ; first instruction of program
+00001000                             9  
+00001000  7004                      10      MOVE.L  #%100,  D0      ; binary value
+00001002  223C 00000100             11      MOVE.L  #$100,  D1      ; hex value
+00001008  7464                      12      MOVE.L  #100,   D2      ; decimal value
+0000100A                            13      
+0000100A  21C0 3000                 14      MOVE.L  D0,     $3000
+0000100E  21C1 3010                 15      MOVE.L  D1,     $3010
+00001012  21C2 3020                 16      MOVE.L  D2,     $3020
+00001016                            17      
+00001016  31FC 0064 3020            18      MOVE.W  #100,   $3020
+0000101C  31FC 0100 3010            19      MOVE.W  #$100,  $3010
+00001022  31FC 0100 3000            20      MOVE.W  #$100,  $3000
+00001028                            21  
+00001028  FFFF FFFF                 22      SIMHALT             ; halt simulator
+0000102C                            23  
+0000102C                            24      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000
