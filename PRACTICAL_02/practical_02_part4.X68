@@ -12,7 +12,7 @@
     MOVE.W  #100,   $2020   ; move decimal value into memory location $2020
     
     MOVE.L  #%1010, $2030   ; move binary value into memory location $2030
-    MOVE.B  #$10,  $2040   ; move hex value into memory location $2040
+    MOVE.B  #$10,   $2040   ; move hex value into memory location $2040
     MOVE.W  #1,     $2050   ; move decimal value into memory location $2050
     
     MOVE.L  #1001,  $2070   ; move decimal value into memory location $2070
@@ -20,7 +20,7 @@
     MOVE.W  #%1011, $2090   ; move binary value into memory location $2090
     
     MOVE.L  #1110,  $3020   ; move decimal value into memory location $3020
-    MOVE.B  #$11, $3030   ; move hex value into memory location $3030
+    MOVE.B  #$11,   $3030   ; move hex value into memory location $3030
     MOVE.W  #%1111, $3040   ; move binary value into memory location $3040
 
     MOVE.L  $2030,  $2060   ; overwrite (currently empty) $2060 with value in $2030
@@ -52,3 +52,4 @@
 *~Font size~10~
 *~Tab type~1~
 *~Tab size~4~
+
