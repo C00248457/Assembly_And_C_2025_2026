@@ -17,7 +17,7 @@
     
     MOVE.W  #100,   $3020   ; move decimal value 100 to memory location $3020
     MOVE.W  #$100,  $3010
-    MOVE.W  #$100,  $3000
+    MOVE.W  #%100,  $3000
 
     SIMHALT             ; halt simulator
 
@@ -28,3 +28,4 @@
 *~Font size~10~
 *~Tab type~1~
 *~Tab size~4~
+
