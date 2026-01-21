@@ -19,13 +19,13 @@
     MOVE.B  #$10,   $2080   ; move hex value into memory location $2080
     MOVE.W  #%1011, $2090   ; move binary value into memory location $2090
     
-    MOVE.L  #1110,  $3020   ; move decimal value into memory location $3020
-    MOVE.B  #$11,   $3030   ; move hex value into memory location $3030
-    MOVE.W  #%1111, $3040   ; move binary value into memory location $3040
+    MOVE.L  #1110,  $20A0   ; move decimal value into memory location $20A0
+    MOVE.B  #$11,   $20B0   ; move hex value into memory location $20B0
+    MOVE.W  #%1111, $20C0   ; move binary value into memory location $20C0
 
     MOVE.L  $2030,  $2060   ; overwrite (currently empty) $2060 with value in $2030
-    MOVE.B  $2070,  $3000   ; overwrite (currently empty) $3000 with value in $2070
-    MOVE.W  $2090,  $3010   ; overwrite (currently empty) $3010 with value in $2090
+    MOVE.B  $2070,  $20D0   ; overwrite (currently empty) $20D0 with value in $2070
+    MOVE.W  $2090,  $20E0   ; overwrite (currently empty) $20E0 with value in $2090
     
     MOVE.L  $2000,  D0      ; moves hex value in memory location $2000 to data register D0
     MOVE.B  $2010,  D1      ; moves binary value in memory location $2010 to data register D1
@@ -35,7 +35,7 @@
     MOVE.B  $2040,  D4      ; moves $2040 into D4
     MOVE.W  $2050,  D5      ; moves $2050 into D5
     
-    MOVE.B  #100,   $2030   ;overwrite memory location 3040 with #100
+    MOVE.B  #100,   $2030   ; overwrite memory location 2030 with #100
     
     MOVE.L  D5,     D6      ; D5 data to D6
     MOVE.B  D4,     D7      ; D4 to D7
