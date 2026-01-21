@@ -11,21 +11,22 @@
     MOVE.L  #$100,  D1      ; takes literal value of hex number
     MOVE.L  #100,   D2      ; takes literal value of decimal number
     
-    MOVE.L  D0,     $3000
-    MOVE.L  D1,     $3010
-    MOVE.L  D2,     $3020
+    MOVE.L  D0,     $3000   ; takes value in D0 and moves to $3000
+    MOVE.L  D1,     $3010   ; takes value in D1 and moves to $3010
+    MOVE.L  D2,     $3020   ; takes value in D2 and moves to $3020
     
-    MOVE.W  #100,   $3020
-    MOVE.W  #$100,  $3010
-    MOVE.W  #%100,  $3000
+    MOVE.W  #100,   $3020   ; puts value in memory location $3020
+    MOVE.W  #$100,  $3010   ; puts value in memory location $3010
+    MOVE.W  #%100,  $3000   ; puts value in memory location $3000
     
-    MOVE.B  #100,   $3020
-    MOVE.B  #$64,   $3010
+    MOVE.B  #100,   $3020   ; puts value in memory location $3020
+    MOVE.B  #$64,   $3010   ; puts value in memory location $3010
     MOVE.B  #%10001111,     $3000       ; move binary value to specified $3000 memory location
 
     SIMHALT             ; halt simulator
 
     END    START        ; last line of source
+
 
 
 *~Font name~Courier New~
