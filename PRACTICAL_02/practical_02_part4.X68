@@ -35,11 +35,13 @@
     MOVE.B  $2040,  D4      ; moves $2040 into D4
     MOVE.W  $2050,  D5      ; moves $2050 into D5
     
+    MOVE.B  #100,   $2030   ;overwrite memory location 3040 with #100
+    
     MOVE.L  D5,     D6      ; D5 data to D6
     MOVE.B  D4,     D7      ; D4 to D7
     MOVE.W  D5,     D0      ; overwrite data in D0 with data in data register 5
     
-    
+   
                             ; originally used memory locations $1000, $1010, $1020
                             ; didn't work, got error
                             ; possibly reserved memory locations?
@@ -48,8 +50,8 @@
 
     END    START            ; last line of source
 
+
 *~Font name~Courier New~
 *~Font size~10~
 *~Tab type~1~
 *~Tab size~4~
-
