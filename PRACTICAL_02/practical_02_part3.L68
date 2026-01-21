@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 19/01/2026 16:25:31
+Created On: 21/01/2026 16:12:40
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      : Practical 02
@@ -15,17 +15,17 @@ Created On: 19/01/2026 16:25:31
 00001002  223C 00000100             11      MOVE.L  #$100,  D1      ; takes literal value of hex number
 00001008  7464                      12      MOVE.L  #100,   D2      ; takes literal value of decimal number
 0000100A                            13      
-0000100A  21C0 3000                 14      MOVE.L  D0,     $3000
-0000100E  21C1 3010                 15      MOVE.L  D1,     $3010
-00001012  21C2 3020                 16      MOVE.L  D2,     $3020
+0000100A  21C0 3000                 14      MOVE.L  D0,     $3000   ; takes value in D0 and moves to $3000
+0000100E  21C1 3010                 15      MOVE.L  D1,     $3010   ; takes value in D1 and moves to $3010
+00001012  21C2 3020                 16      MOVE.L  D2,     $3020   ; takes value in D2 and moves to $3020
 00001016                            17      
-00001016  31FC 0064 3020            18      MOVE.W  #100,   $3020
-0000101C  31FC 0100 3010            19      MOVE.W  #$100,  $3010
-00001022  31FC 0004 3000            20      MOVE.W  #%100,  $3000
+00001016  31FC 0064 3020            18      MOVE.W  #100,   $3020   ; puts value in memory location $3020
+0000101C  31FC 0100 3010            19      MOVE.W  #$100,  $3010   ; puts value in memory location $3010
+00001022  31FC 0004 3000            20      MOVE.W  #%100,  $3000   ; puts value in memory location $3000
 00001028                            21      
-00001028  11FC 0064 3020            22      MOVE.B  #100,   $3020
-0000102E  11FC 0064 3010            23      MOVE.B  #$64,   $3010
-00001034  11FC 008F 3000            24      MOVE.B  #%10001111,     $3000
+00001028  11FC 0064 3020            22      MOVE.B  #100,   $3020   ; puts value in memory location $3020
+0000102E  11FC 0064 3010            23      MOVE.B  #$64,   $3010   ; puts value in memory location $3010
+00001034  11FC 008F 3000            24      MOVE.B  #%10001111,     $3000       ; move binary value to specified $3000 memory location
 0000103A                            25  
 0000103A  FFFF FFFF                 26      SIMHALT             ; halt simulator
 0000103E                            27  

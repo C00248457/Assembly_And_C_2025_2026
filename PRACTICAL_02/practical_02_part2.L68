@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 19/01/2026 16:05:04
+Created On: 21/01/2026 15:34:02
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      : Practical 02
@@ -15,13 +15,13 @@ Created On: 19/01/2026 16:05:04
 00001002  223C 00000100             11      MOVE.L  #$100,  D1      ; hex value
 00001008  7464                      12      MOVE.L  #100,   D2      ; decimal value
 0000100A                            13      
-0000100A  21C0 3000                 14      MOVE.L  D0,     $3000
+0000100A  21C0 3000                 14      MOVE.L  D0,     $3000   ; move data register D0 to memory location $3000
 0000100E  21C1 3010                 15      MOVE.L  D1,     $3010
 00001012  21C2 3020                 16      MOVE.L  D2,     $3020
 00001016                            17      
-00001016  31FC 0064 3020            18      MOVE.W  #100,   $3020
+00001016  31FC 0064 3020            18      MOVE.W  #100,   $3020   ; move decimal value 100 to memory location $3020
 0000101C  31FC 0100 3010            19      MOVE.W  #$100,  $3010
-00001022  31FC 0100 3000            20      MOVE.W  #$100,  $3000
+00001022  31FC 0004 3000            20      MOVE.W  #%100,  $3000
 00001028                            21  
 00001028  FFFF FFFF                 22      SIMHALT             ; halt simulator
 0000102C                            23  
