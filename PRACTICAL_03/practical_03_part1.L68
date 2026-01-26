@@ -1,0 +1,30 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 26/01/2026 15:17:37
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 3 Task 1
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 26/01/26
+00000000                             5  * Description: Understanding and utilising address registers
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:              ; first instruction of program
+00001000                             9      
+00001000  43F8 4000                 10      LEA $4000, A1       ; load effective address
+00001004  12BC 0064                 11      MOVE.B #100, (A1)    ; move value into memory location pointed to by address register A1
+00001008                            12  
+00001008  FFFF FFFF                 13      SIMHALT             ; halt simulator
+0000100C                            14  
+0000100C                            15  
+0000100C                            16  
+0000100C                            17      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000

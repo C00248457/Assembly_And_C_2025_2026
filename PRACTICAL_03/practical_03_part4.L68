@@ -1,0 +1,30 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 26/01/2026 16:02:15
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 3 Task 4
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 26/01/26
+00000000                             5  * Description: Understanding and utilising address registers
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:              ; first instruction of program
+00001000                             9  
+00001000  41F9 0000100A             10      LEA DATA, A0        ; create label and point to address register 0 
+00001006                            11  
+00001006  FFFF FFFF                 12      SIMHALT             ; halt simulator
+0000100A                            13  
+0000100A                            14  
+0000100A= 64                        15  DATA dc.b $64           ; reserve a byte of memory 
+0000100B                            16      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+DATA                100A
+START               1000

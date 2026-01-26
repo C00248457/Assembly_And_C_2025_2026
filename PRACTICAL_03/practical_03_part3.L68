@@ -1,0 +1,32 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 26/01/2026 15:50:58
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 3 Task 3
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 26/01/26
+00000000                             5  * Description: Understanding and utilising address registers
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8      START:              ; first instruction of program
+00001000                             9      
+00001000  47F9 0000100E             10      LEA HEALTH, A3      ; move into address register 3
+00001006  0413 000A                 11      SUB.B   #10, (A3)   ; subtract from value in address register 3
+0000100A                            12  
+0000100A                            13  
+0000100A  FFFF FFFF                 14      SIMHALT             ; halt simulator
+0000100E                            15  
+0000100E= 64                        16  HEALTH dc.b $64
+0000100F                            17  
+0000100F                            18      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+HEALTH              100E
+START               1000
