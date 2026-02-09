@@ -1,0 +1,54 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 09/02/2026 16:50:04
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  Practical 05 Task 2
+00000000                             3  * Written by :  Rachel O Shea
+00000000                             4  * Date       :  09/02/2026
+00000000                             5  * Description:  Utilise conditional branches and control structures
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000  43F9 0000102C             10      LEA PLAYER_POSITION, A1
+00001006  45F9 0000102E             11      LEA ENEMY_POSITION, A2
+0000100C                            12      
+0000100C  123C 0032                 13      MOVE.B #50, D1
+00001010  143C 0000                 14      MOVE.B #0, D2
+00001014                            15      
+00001014                            16  COLLISION_CHECK:
+00001014  B242                      17      CMP D2, D1
+00001016  6D00 0006                 18      BLT NEXT_MOVE
+0000101A  6700 0008                 19      BEQ COLLISION
+0000101E                            20      
+0000101E                            21  NEXT_MOVE:
+0000101E  0602 0032                 22      ADD.B #50, D2
+00001022  60F0                      23      BRA COLLISION_CHECK
+00001024                            24     
+00001024                            25  COLLISION:
+00001024  6000 0002                 26      BRA GAME_OVER
+00001028                            27      
+00001028                            28  GAME_OVER:
+00001028                            29  
+00001028  FFFF FFFF                 30      SIMHALT             ; halt simulator
+0000102C                            31  
+0000102C= 0A 0F                     32  PLAYER_POSITION: DC.B 10, 15
+0000102E= 32 37                     33  ENEMY_POSITION: DC.B 50, 55
+00001030                            34  
+00001030                            35      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+COLLISION           1024
+COLLISION_CHECK     1014
+ENEMY_POSITION      102E
+GAME_OVER           1028
+NEXT_MOVE           101E
+PLAYER_POSITION     102C
+START               1000

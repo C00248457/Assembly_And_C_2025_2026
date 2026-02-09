@@ -1,0 +1,49 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 09/02/2026 16:17:30
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  Pratical 05 Task 1
+00000000                             3  * Written by :  Rachel O Shea
+00000000                             4  * Date       :  09/02/2026
+00000000                             5  * Description:  Utilise conditional branches and control structures
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10      INITIALISE:
+00001000  103C 0003                 11          MOVE.B #3, D0
+00001004  123C 0000                 12          MOVE.B #0, D1
+00001008                            13          
+00001008                            14      GAME_LOOP:
+00001008  B03C 0001                 15          CMP.B #1, D0    ; compares (but doesn't edit the value in register)
+0000100C  6600 0006                 16          BNE GAME_POINTS ; branch if not equal
+00001010  6700 000A                 17          BEQ GAME_OVER   ; branch if equal
+00001014                            18          
+00001014                            19      GAME_POINTS:
+00001014  0601 000A                 20          ADD.B   #10, D1
+00001018  5300                      21          SUB.B   #1, D0
+0000101A  60EC                      22          BRA     GAME_LOOP
+0000101C                            23          
+0000101C                            24      GAME_OVER:
+0000101C                            25  
+0000101C                            26  * Put program code here
+0000101C                            27  
+0000101C  FFFF FFFF                 28      SIMHALT             ; halt simulator
+00001020                            29  
+00001020                            30  * Put variables and constants here
+00001020                            31  
+00001020                            32      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+GAME_LOOP           1008
+GAME_OVER           101C
+GAME_POINTS         1014
+INITIALISE          1000
+START               1000
