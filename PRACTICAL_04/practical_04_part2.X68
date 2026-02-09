@@ -36,15 +36,20 @@ START:                  ; first instruction of program
     ADD.B   #10, (A1)
 
     ; Use logical or to perform OR logical between source and destination operand
-    ; Result will be saved to destination operand
-    ; Using this to compare current player health to 100
-    OR.B    #$100, (A1)   
+    OR.B    #$100, (A1) 
 
+    ; Invert bits in the location
+    NOT.B   D2,     D3
+    
+    ; Compares the bits
+    EOR.B   D2,     D3
+    
     SIMHALT             ; halt simulator
 
 * Put variables and constants here
 
     END    START        ; last line of source
+
 
 *~Font name~Courier New~
 *~Font size~10~
