@@ -1,0 +1,64 @@
+
+
+
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 04/02/2026 16:21:08
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  Pratical 4
+00000000                             3  * Written by :  Rachel O Shea
+00000000                             4  * Date       :  04/02/2026
+00000000                             5  * Description:  Practical 4 Part 2
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10      ; Move Health to Memory Location $3000
+00001000  11FC 0064 3000            11      MOVE.B  #100, $3000
+00001006                            12      
+00001006                            13      ; Move Location of Player into Data Register
+00001006                            14      ; X first Byte 1 to 15
+00001006                            15      ; Y second byte 0 to 15
+00001006  143C 0012                 16      MOVE.B  #$12, D2
+0000100A                            17      
+0000100A                            18      ; Move Location of NPC into Data Register
+0000100A                            19      ; X first Byte 0 to 15
+0000100A                            20      ; Y second Byte 0 to 15
+0000100A  163C 0022                 21      MOVE.B  #$22, D3
+0000100E                            22      
+0000100E                            23      ; Bitwise and D2 and D3
+0000100E                            24      ; What's new location of Player
+0000100E  C602                      25      AND.B D2, D3
+00001010                            26      
+00001010                            27      ; Load Memory Address $3000 into
+00001010                            28      ; Address Rehister A1
+00001010  43F8 3000                 29      LEA     $3000, A1
+00001014                            30      
+00001014                            31      ; Hit by NPS
+00001014                            32      ; Non Player Character
+00001014  0411 0014                 33      SUB.B   #20, (A1)
+00001018                            34      
+00001018                            35      ; Pickup Health Found
+00001018  0611 000A                 36      ADD.B   #10, (A1)
+0000101C                            37  
+0000101C                            38      ; Use logical or to perform OR logical between source and destination operand
+0000101C                            39      ; Result will be saved to destination operand
+0000101C                            40      ; Using this to compare current player health to 100
+Line 41 ERROR: Immediate data exceeds 8 bits
+0000101C  0011 0000                 41      OR.B    #$100, (A1)   
+00001020                            42  
+00001020  FFFF FFFF                 43      SIMHALT             ; halt simulator
+00001024                            44  
+00001024                            45  * Put variables and constants here
+00001024                            46  
+00001024                            47      END    START        ; last line of source
+
+1 error detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000

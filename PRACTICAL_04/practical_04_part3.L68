@@ -1,0 +1,61 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 04/02/2026 15:49:12
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      :  Pratical 4
+00000000                             3  * Written by :  Rachel O Shea
+00000000                             4  * Date       :  04/02/2026
+00000000                             5  * Description:  Practical 4 Task 3
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10      ; Move Health to Memory Location $3000
+00001000  11FC 0064 3000            11      MOVE.B  #100, $3000
+00001006                            12      
+00001006                            13      ; Load Memory Address $3000 into
+00001006                            14      ; Address Register A1
+00001006  43F8 3000                 15      LEA     $3000, A1
+0000100A                            16      
+0000100A                            17      ; Branch to TAKING_DAMAGE
+0000100A  6100 000A                 18      BSR     TAKING_DAMAGE
+0000100E                            19      
+0000100E                            20  BACK_IN_THE_GAME:
+0000100E                            21      ; Lets Help this player out
+0000100E  6100 000C                 22      BSR     HEALTH_PICKUP
+00001012  6000 000E                 23      BRA     GAME_END
+00001016                            24      
+00001016                            25  TAKING_DAMAGE:
+00001016                            26      ; Hit by NPC
+00001016                            27      ; Non Player Character
+00001016  0411 0014                 28      SUB.B   #20, (A1)
+0000101A  60F2                      29      BRA     BACK_IN_THE_GAME
+0000101C                            30      
+0000101C                            31  HEALTH_PICKUP:
+0000101C                            32      ; Pickup Health Found
+0000101C  0611 000A                 33      ADD.B   #10, (A1)
+00001020  4E75                      34      RTS
+00001022                            35      
+00001022                            36  GAME_END:
+00001022                            37      ; Game Over
+00001022  12BC 0000                 38      MOVE.B  #$00, (A1)
+00001026                            39  
+00001026  FFFF FFFF                 40      SIMHALT             ; halt simulator
+0000102A                            41  
+0000102A                            42  * Put variables and constants here
+0000102A                            43  
+0000102A                            44      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+BACK_IN_THE_GAME    100E
+GAME_END            1022
+HEALTH_PICKUP       101C
+START               1000
+TAKING_DAMAGE       1016
