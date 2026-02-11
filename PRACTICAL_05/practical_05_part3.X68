@@ -1,7 +1,7 @@
 *-----------------------------------------------------------
 * Title      :  Practical 05 Task 2
 * Written by :  Rachel O Shea
-* Date       :  09/02/2026
+* Date       :  11/02/2026
 * Description:  Utilise conditional branches and control structures
 *-----------------------------------------------------------
     ORG    $1000
@@ -14,26 +14,24 @@ START:                  ; first instruction of program
     MOVE.B #0, D2
     
 COLLISION_CHECK:
-    CMP D2, D1
+    CMP, D2, D1
     BLT NEXT_MOVE
     BEQ COLLISION
     
 NEXT_MOVE:
     ADD.B #1, D2
     BRA COLLISION_CHECK
-   
+    
 COLLISION:
     BRA GAME_OVER
     
 GAME_OVER:
-
     SIMHALT             ; halt simulator
 
-PLAYER_POSITION: DC.B 55, 55
-ENEMY_POSITION: DC.B 55, 55
+PLAYER_POSITION: DC.B 10. 15
+ENEMY_POSITION: DC.B 50, 55
 
     END    START        ; last line of source
-
 
 *~Font name~Courier New~
 *~Font size~10~
