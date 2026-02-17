@@ -1,0 +1,41 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 17/02/2026 22:46:19
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : The Grains of Fate
+00000000                             3  * Written by : Rachel O Shea - C00248457
+00000000                             4  * Date       : 17/02/2026
+00000000                             5  * Description: 'Rice' to the occasion as a tiny chef in control of curbing his hunger
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10  * Put program code here
+00001000                            11  
+00001000  FFFF FFFF                 12      SIMHALT             ; halt simulator
+00001004                            13  
+00001004= 2A 2A 2A 2A 2A 2A ...     14  WELCOME_MSG:    DC.B    '***********************************************'
+00001033= 0D 0A                     15                  DC.B    $0D, $0A
+00001035= 57 45 4C 43 4F 4D ...     16                  DC.B    'WELCOME TO THE KITCHEN'
+0000104B= 0D 0A                     17                  DC.B    $0D, $0A
+0000104D= 43 48 4F 4F 53 45 ...     18                  DC.B    'CHOOSE BETWEEN THE INGREDIENTS AVAILABLE TO YOU'
+0000107C= 0D 0A                     19                  DC.B    $0D, $0A
+0000107E= 42 55 54 20 42 45 ...     20                  DC.B    'BUT BE WARNED'
+0000108B= 0D 0A                     21                  DC.B    $0D, $0A
+0000108D= 59 4F 55 52 20 41 ...     22                  DC.B    'YOUR ACTIONS MAY HAVE CONSEQUENCES...'
+000010B2= 0D 0A                     23                  DC.B    $0D, $0A
+000010B4= 2A 2A 2A 2A 2A 2A ...     24                  DC.B    '***********************************************'
+000010E3= 0D 0A 00                  25                  DC.B    $0D, $0A, 0
+000010E6                            26  
+000010E6                            27      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+START               1000
+WELCOME_MSG         1004
