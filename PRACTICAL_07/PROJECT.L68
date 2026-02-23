@@ -1,41 +1,110 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 17/02/2026 22:46:19
+Created On: 21/02/2026 20:48:55
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      : The Grains of Fate
 00000000                             3  * Written by : Rachel O Shea - C00248457
-00000000                             4  * Date       : 17/02/2026
-00000000                             5  * Description: 'Rice' to the occasion as a tiny chef in control of curbing his hunger
+00000000                             4  * Date       : 21/02/2026
+00000000                             5  * Description: 'Rice' to the occasion as a tiny chef responsible for feeding the ancient cosmic entity that inhabits the pocket dimension you live in
 00000000                             6  *-----------------------------------------------------------
-00001000                             7      ORG    $1000
-00001000                             8  START:                  ; first instruction of program
-00001000                             9  
-00001000                            10  * Put program code here
-00001000                            11  
-00001000  FFFF FFFF                 12      SIMHALT             ; halt simulator
-00001004                            13  
-00001004= 2A 2A 2A 2A 2A 2A ...     14  WELCOME_MSG:    DC.B    '***********************************************'
-00001033= 0D 0A                     15                  DC.B    $0D, $0A
-00001035= 57 45 4C 43 4F 4D ...     16                  DC.B    'WELCOME TO THE KITCHEN'
-0000104B= 0D 0A                     17                  DC.B    $0D, $0A
-0000104D= 43 48 4F 4F 53 45 ...     18                  DC.B    'CHOOSE BETWEEN THE INGREDIENTS AVAILABLE TO YOU'
-0000107C= 0D 0A                     19                  DC.B    $0D, $0A
-0000107E= 42 55 54 20 42 45 ...     20                  DC.B    'BUT BE WARNED'
-0000108B= 0D 0A                     21                  DC.B    $0D, $0A
-0000108D= 59 4F 55 52 20 41 ...     22                  DC.B    'YOUR ACTIONS MAY HAVE CONSEQUENCES...'
-000010B2= 0D 0A                     23                  DC.B    $0D, $0A
-000010B4= 2A 2A 2A 2A 2A 2A ...     24                  DC.B    '***********************************************'
-000010E3= 0D 0A 00                  25                  DC.B    $0D, $0A, 0
-000010E6                            26  
-000010E6                            27      END    START        ; last line of source
+00000000                             7  * STARTING MEMORY ADDRESS FOR THE PROGRAMME $1000  
+00000000                             8  *-----------------------------------------------------------
+00001000                             9      ORG    $1000
+00001000                            10      
+00001000  =00000000                 11  EXIT            EQU 0                   ; USED TO EXIT THE PROGRAM
+00001000  =00000064                 12  START_FLAVOUR   EQU 100                 ; STARTING FLAVOUR POINTS
+00001000  =00000064                 13  START_FRESHNESS EQU 100                 ; STARTING FRESHNESS POINTS
+00001000  =00000096                 14  PERFECT_BOWL    EQU 150                 ; MINIMUM SCORE NEEDED FOR PERFECT BOWL
+00001000  =0000005A                 15  BAD_BOWL        EQU 90                  ; MAXMIMUM SCORE POSSIBLE FOR BAD BOWL
+00001000  =00000041                 16  WASABI_HIGH     EQU 65                  ; FULL BONUS FLAVOUR
+00001000  =00000028                 17  WASABI_LOW      EQU 40                  ; PENALTY FLAVOUR
+00001000                            18  
+00001000                            19  START:                  
+00001000  11F8 0064 4000            20      MOVE.B  START_FLAVOUR, $4000        ; PUT FLAVOUR POINTS IN MEMORY LOCATION $4000
+00001006  45F8 4000                 21      LEA     $4000, A2                   ; ASSIGN ADDRESS A2 TO THAT MEMORY LOCATION
+0000100A  11F8 0064 4001            22      MOVE.B  START_FRESHNESS, $4001      ; PUT FRESHNESS POINTS IN MEMORY LOCATION $4001
+00001010  47F8 4001                 23      LEA     $4001, A3                   ; ASSIGN ADDRESS A3 TO THAT MEMORY LOCATION
+00001014                            24      
+00001014  6100 1FF0                 25      BSR     WELCOME                     ; BRANCH TO WELCOME SUBROUTINE
+Line 26 ERROR: Undefined symbol
+00001018  6100 ACFC                 26      BSR     INPUT                       ; BRANCH TO THE INPUT SUBROUTINE
+0000101C  6100 1FE2                 27      BSR     GAME                        ; BRANCH TO GAME SUBROUTINE  
+00001020                            28  
+00001020                            29  *GAME LOOP
+00003000                            30      ORG     $3000                       ; REST OF PROGRAM LOCATED FROM 3000 ONWARDS
+00003000                            31  
+00003000                            32  *--------------------GAME SUBROUTINE-------------------------    
+00003000                            33  GAME:
+00003000  6100 001C                 34      BSR     GAMELOOP                    ; BRANCH TO GAMELOOP SUBROUTINE
+00003004  4E75                      35      RTS                                 ; RETURN FROM GAME: SUBROUTINE
+00003006                            36      
+00003006                            37  *--------------------WELCOME SUBROUTINE---------------------- 
+00003006                            38  WELCOME:
+Line 39 ERROR: Undefined symbol
+00003006  6100 8D0E                 39      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000300A  43F9 00003040             40      LEA     WELCOME_MSG, A1             ; ASSIGN WELCOME MESSAGE TO ADDRESS REGISTER 1
+00003010  103C 000E                 41      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0 
+00003014  4E4F                      42      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+Line 43 ERROR: Undefined symbol
+00003016  6100 8CFE                 43      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+Line 44 ERROR: Undefined symbol
+0000301A  6100 8CFA                 44      BSR     RESUME                      ; BRANCH TO RESUME SUBROUTINE
+0000301E                            45  
+0000301E                            46  *--------------------GAMELOOP (MAIN LOOP)--------------------   
+0000301E                            47  GAMELOOP:
+0000301E  6100 001C                 48      BSR     LARDER                      ; BRANCH TO LARDER SUBROUTINE
+Line 49 ERROR: Undefined symbol
+00003022  6100 8CF2                 49      BSR     FRIDGE                      ; BRANCH TO FRIDGE SUBROUTINE
+Line 50 ERROR: Undefined symbol
+00003026  6100 8CEE                 50      BSR     ANOMALY                     ; BRANCH TO ANOMALY SUBROUTINE
+Line 51 ERROR: Undefined symbol
+0000302A  6100 8CEA                 51      BSR     SPICERACK                   ; BRANCH TO SPICERACK SUBROUTINE
+Line 52 ERROR: Undefined symbol
+0000302E  6100 8CE6                 52      BSR     END                         ; BRANCH TO END SUBROUTINE
+Line 53 ERROR: Undefined symbol
+00003032  6100 8CE2                 53      BSR     REPLAY                      ; BRANCH TO REPLAY SUBROUTINE
+Line 54 ERROR: Undefined symbol
+00003036  6100 8CDE                 54      BSR     CLEAR_SCREEN                ; CLEAR THE SCREEN
+0000303A  4E75                      55      RTS                                 ; RETURN FROM GAME: SUBROUTINE
+0000303C                            56  
+0000303C                            57  *---------------------LARDER SUBROUTINE----------------------   
+0000303C                            58  LARDER:
+0000303C                            59      
+0000303C  FFFF FFFF                 60      SIMHALT             ; halt simulator
+00003040                            61  
+00003040= 2A 2A 2A 2A 2A 2A ...     62  WELCOME_MSG:    DC.B    '***********************************************'
+0000306F= 0D 0A                     63                  DC.B    $0D, $0A
+00003071= 57 45 4C 43 4F 4D ...     64                  DC.B    'WELCOME TO THE KITCHEN'
+00003087= 0D 0A                     65                  DC.B    $0D, $0A
+00003089= 43 48 4F 4F 53 45 ...     66                  DC.B    'CHOOSE BETWEEN THE INGREDIENTS AVAILABLE TO YOU'
+000030B8= 0D 0A                     67                  DC.B    $0D, $0A
+000030BA= 42 55 54 20 42 45 ...     68                  DC.B    'BUT BE WARNED'
+000030C7= 0D 0A                     69                  DC.B    $0D, $0A
+000030C9= 59 4F 55 52 20 41 ...     70                  DC.B    'YOUR ACTIONS MAY HAVE CONSEQUENCES...'
+000030EE= 0D 0A                     71                  DC.B    $0D, $0A
+000030F0= 2A 2A 2A 2A 2A 2A ...     72                  DC.B    '***********************************************'
+0000311F= 0D 0A 00                  73                  DC.B    $0D, $0A, 0
+00003122                            74  
+00003122                            75      END    START        ; last line of source
 
-No errors detected
+10 errors detected
 No warnings generated
 
 
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
+BAD_BOWL            5A
+EXIT                0
+GAME                3000
+GAMELOOP            301E
+LARDER              303C
+PERFECT_BOWL        96
 START               1000
-WELCOME_MSG         1004
+START_FLAVOUR       64
+START_FRESHNESS     64
+WASABI_HIGH         41
+WASABI_LOW          28
+WELCOME             3006
+WELCOME_MSG         3040
