@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 21/02/2026 20:48:55
+Created On: 23/02/2026 16:22:40
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      : The Grains of Fate
@@ -27,8 +27,7 @@ Created On: 21/02/2026 20:48:55
 00001010  47F8 4001                 23      LEA     $4001, A3                   ; ASSIGN ADDRESS A3 TO THAT MEMORY LOCATION
 00001014                            24      
 00001014  6100 1FF0                 25      BSR     WELCOME                     ; BRANCH TO WELCOME SUBROUTINE
-Line 26 ERROR: Undefined symbol
-00001018  6100 ACFC                 26      BSR     INPUT                       ; BRANCH TO THE INPUT SUBROUTINE
+00001018  6100 20A6                 26      BSR     INPUT                       ; BRANCH TO THE INPUT SUBROUTINE
 0000101C  6100 1FE2                 27      BSR     GAME                        ; BRANCH TO GAME SUBROUTINE  
 00001020                            28  
 00001020                            29  *GAME LOOP
@@ -36,75 +35,184 @@ Line 26 ERROR: Undefined symbol
 00003000                            31  
 00003000                            32  *--------------------GAME SUBROUTINE-------------------------    
 00003000                            33  GAME:
-00003000  6100 001C                 34      BSR     GAMELOOP                    ; BRANCH TO GAMELOOP SUBROUTINE
-00003004  4E75                      35      RTS                                 ; RETURN FROM GAME: SUBROUTINE
+00003000  6100 0018                 34      BSR     GAMELOOP                    ; BRANCH TO GAMELOOP SUBROUTINE
+00003004  4E75                      35      RTS                                 ; RETURN FROM GAME SUBROUTINE
 00003006                            36      
 00003006                            37  *--------------------WELCOME SUBROUTINE---------------------- 
 00003006                            38  WELCOME:
-Line 39 ERROR: Undefined symbol
-00003006  6100 8D0E                 39      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
-0000300A  43F9 00003040             40      LEA     WELCOME_MSG, A1             ; ASSIGN WELCOME MESSAGE TO ADDRESS REGISTER 1
+00003006  6100 00A2                 39      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000300A  43F9 000030C6             40      LEA     WELCOME_MSG, A1             ; ASSIGN WELCOME MESSAGE TO ADDRESS REGISTER 1
 00003010  103C 000E                 41      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0 
 00003014  4E4F                      42      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
-Line 43 ERROR: Undefined symbol
-00003016  6100 8CFE                 43      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
-Line 44 ERROR: Undefined symbol
-0000301A  6100 8CFA                 44      BSR     RESUME                      ; BRANCH TO RESUME SUBROUTINE
-0000301E                            45  
-0000301E                            46  *--------------------GAMELOOP (MAIN LOOP)--------------------   
-0000301E                            47  GAMELOOP:
-0000301E  6100 001C                 48      BSR     LARDER                      ; BRANCH TO LARDER SUBROUTINE
-Line 49 ERROR: Undefined symbol
-00003022  6100 8CF2                 49      BSR     FRIDGE                      ; BRANCH TO FRIDGE SUBROUTINE
-Line 50 ERROR: Undefined symbol
-00003026  6100 8CEE                 50      BSR     ANOMALY                     ; BRANCH TO ANOMALY SUBROUTINE
-Line 51 ERROR: Undefined symbol
-0000302A  6100 8CEA                 51      BSR     SPICERACK                   ; BRANCH TO SPICERACK SUBROUTINE
-Line 52 ERROR: Undefined symbol
-0000302E  6100 8CE6                 52      BSR     END                         ; BRANCH TO END SUBROUTINE
-Line 53 ERROR: Undefined symbol
-00003032  6100 8CE2                 53      BSR     REPLAY                      ; BRANCH TO REPLAY SUBROUTINE
-Line 54 ERROR: Undefined symbol
-00003036  6100 8CDE                 54      BSR     CLEAR_SCREEN                ; CLEAR THE SCREEN
-0000303A  4E75                      55      RTS                                 ; RETURN FROM GAME: SUBROUTINE
-0000303C                            56  
-0000303C                            57  *---------------------LARDER SUBROUTINE----------------------   
-0000303C                            58  LARDER:
-0000303C                            59      
-0000303C  FFFF FFFF                 60      SIMHALT             ; halt simulator
-00003040                            61  
-00003040= 2A 2A 2A 2A 2A 2A ...     62  WELCOME_MSG:    DC.B    '***********************************************'
-0000306F= 0D 0A                     63                  DC.B    $0D, $0A
-00003071= 57 45 4C 43 4F 4D ...     64                  DC.B    'WELCOME TO THE KITCHEN'
-00003087= 0D 0A                     65                  DC.B    $0D, $0A
-00003089= 43 48 4F 4F 53 45 ...     66                  DC.B    'CHOOSE BETWEEN THE INGREDIENTS AVAILABLE TO YOU'
-000030B8= 0D 0A                     67                  DC.B    $0D, $0A
-000030BA= 42 55 54 20 42 45 ...     68                  DC.B    'BUT BE WARNED'
-000030C7= 0D 0A                     69                  DC.B    $0D, $0A
-000030C9= 59 4F 55 52 20 41 ...     70                  DC.B    'YOUR ACTIONS MAY HAVE CONSEQUENCES...'
-000030EE= 0D 0A                     71                  DC.B    $0D, $0A
-000030F0= 2A 2A 2A 2A 2A 2A ...     72                  DC.B    '***********************************************'
-0000311F= 0D 0A 00                  73                  DC.B    $0D, $0A, 0
-00003122                            74  
-00003122                            75      END    START        ; last line of source
+00003016  6100 0092                 43      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000301A                            44  
+0000301A                            45  *--------------------GAMELOOP (MAIN LOOP)--------------------   
+0000301A                            46  GAMELOOP:
+0000301A  6100 001C                 47      BSR     LARDER                      ; BRANCH TO LARDER SUBROUTINE
+0000301E  6100 002E                 48      BSR     FRIDGE                      ; BRANCH TO FRIDGE SUBROUTINE
+00003022  6100 0040                 49      BSR     ANOMALY                     ; BRANCH TO ANOMALY SUBROUTINE
+00003026  6100 0052                 50      BSR     SPICERACK                   ; BRANCH TO SPICERACK SUBROUTINE
+0000302A  6100 0064                 51      BSR     END                         ; BRANCH TO END SUBROUTINE
+0000302E  6100 0076                 52      BSR     REPLAY                      ; BRANCH TO REPLAY SUBROUTINE
+00003032  6100 0076                 53      BSR     CLEAR_SCREEN                ; CLEAR THE SCREEN
+00003036  4E75                      54      RTS                                 ; RETURN FROM GAME SUBROUTINE
+00003038                            55  
+00003038                            56  *---------------------LARDER SUBROUTINE----------------------   
+00003038                            57  LARDER:
+00003038  6100 0070                 58      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000303C  43F9 000031A8             59      LEA     LARDER_MESSAGE, A1          ; ASSIGN LARDER MESSAGE TO ADDRESS REGISER 1
+00003042  103C 000E                 60      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0
+00003046  4E4F                      61      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+00003048  6100 0060                 62      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000304C  4E75                      63      RTS                                 ; RETURN FROM LARDER SUBROUTINE
+0000304E                            64      
+0000304E                            65  
+0000304E                            66  *---------------------FRIDGE SUBROUTINE---------------------- 
+0000304E                            67  FRIDGE:
+0000304E  6100 005A                 68      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+00003052  43F9 0000321D             69      LEA     FRIDGE_MESSAGE, A1          ; ASSIGN FRIDGE MESSAGE TO ADDRESS REGISTER 1    
+00003058  103C 000E                 70      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0
+0000305C  4E4F                      71      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+0000305E  6100 004A                 72      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+00003062  4E75                      73      RTS                                 ; RETURN FROM FRIDGE SUBROUTINE
+00003064                            74      
+00003064                            75  *---------------------ANOMALY SUBROUTINE----------------------  
+00003064                            76  ANOMALY:
+00003064  6100 0044                 77      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+00003068  43F9 00003290             78      LEA     ANOMALY_MESSAGE, A1         ; ASSIGN ANOMALY MESSAGE TO ADDRESS REGISTER 1
+0000306E  103C 000E                 79      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0
+00003072  4E4F                      80      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+00003074  6100 0034                 81      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+00003078  4E75                      82      RTS                                 ; RETURN FROM ANOMALY SUBROUTINE
+0000307A                            83  
+0000307A                            84  *---------------------SPICERACK SUBROUTINE---------------------
+0000307A                            85  SPICERACK:
+0000307A  6100 002E                 86      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000307E  43F9 0000333B             87      LEA     SPICERACK_MESSAGE, A1       ; ASSIGN SPICERACK MESSAGE TO ADDRESS REGISTER 1  
+00003084  103C 000E                 88      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0
+00003088  4E4F                      89      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+0000308A  6100 001E                 90      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+0000308E  4E75                      91      RTS                                 ; RETURN FROM SPICERACK SUBROUTINE
+00003090                            92      
+00003090                            93  *---------------------END SUBROUTINE---------------------------
+00003090                            94  END:
+00003090  6100 0018                 95      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+00003094  43F9 000033D2             96      LEA     END_MESSAGE, A1             ; ASSIGN END MESSAGE TO ADDRESS REGISTER 1
+0000309A  103C 000E                 97      MOVE.B  #14, D0                     ; MOVE LITERAL 14 TO D0
+0000309E  4E4F                      98      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+000030A0  6100 0008                 99      BSR     ENDL                        ; BRANCH TO ENDL SUBROUTINE
+000030A4  4E75                     100      RTS                                 ; RETURN FROM END SUBROUTINE
+000030A6                           101  
+000030A6                           102  *---------------------REPLAY SUBROUTINE-----------------------
+000030A6                           103  REPLAY:
+000030A6  6100 FF72                104      BSR     GAMELOOP                    ; BRANCH TO GAME LOOP WHERE GAME STARTS ** REVIEW THIS**
+000030AA                           105  
+000030AA                           106  *---------------------CLEAR SCREEN SUBROUTINE-----------------
+000030AA                           107  CLEAR_SCREEN:
+000030AA                           108  
+000030AA                           109  *---------------------ENDL SUBROUTINE-------------------------
+000030AA                           110  ENDL:
+000030AA  48E7 8040                111      MOVEM.L D0/A1,-(A7)                 ; SAVE D0 AND A1
+000030AE  303C 000E                112      MOVE    #14, D0                     ; MOVE LITERAL 14 TO D0
+000030B2  43F9 00003471            113      LEA     CRLF, A1                    ; ASSIGN CRLF TO ADDRESS REGISTER A1
+000030B8  4E4F                     114      TRAP    #15                         ; TRAP AND INTERPRET VALUE IN D0
+000030BA  4CDF 0201                115      MOVEM.L (A7)+, D0/A1                ; RESTORE D0 AND A1
+000030BE  4E75                     116      RTS                                 ; RETURN FROM ENDL SUBROUTINE
+000030C0                           117           
+000030C0                           118  *---------------------INPUT SUBROUTINE------------------------
+000030C0                           119  INPUT:
+000030C0  4E75                     120      RTS                                 ; RETURN FROM ENDL SUBROUTINE  
+000030C2                           121  
+000030C2  FFFF FFFF                122      SIMHALT             ; halt simulator
+000030C6                           123  
+000030C6= 2A 2A 2A 2A 2A 2A ...    124  WELCOME_MSG:        DC.B    '***********************************************'
+000030F5= 0D 0A                    125                      DC.B    $0D, $0A
+000030F7= 57 45 4C 43 4F 4D ...    126                      DC.B    'WELCOME TO THE KITCHEN'
+0000310D= 0D 0A                    127                      DC.B    $0D, $0A
+0000310F= 43 48 4F 4F 53 45 ...    128                      DC.B    'CHOOSE BETWEEN THE INGREDIENTS AVAILABLE TO YOU'
+0000313E= 0D 0A                    129                      DC.B    $0D, $0A
+00003140= 42 55 54 20 42 45 ...    130                      DC.B    'BUT BE WARNED'
+0000314D= 0D 0A                    131                      DC.B    $0D, $0A
+0000314F= 59 4F 55 52 20 41 ...    132                      DC.B    'YOUR ACTIONS MAY HAVE CONSEQUENCES...'
+00003174= 0D 0A                    133                      DC.B    $0D, $0A
+00003176= 2A 2A 2A 2A 2A 2A ...    134                      DC.B    '***********************************************'
+000031A5= 0D 0A 00                 135                      DC.B    $0D, $0A, 0
+000031A8                           136                        
+000031A8= 2A 2A 2A 2A 2A 2A ...    137  LARDER_MESSAGE:     DC.B    '***********************************************'
+000031D7= 0D 0A                    138                      DC.B    $0D, $0A
+000031D9= 52 49 43 45 20 4F ...    139                      DC.B    'RICE OR NOODLES?'
+000031E9= 0D 0A                    140                      DC.B    $0D, $0A
+000031EB= 2A 2A 2A 2A 2A 2A ...    141                      DC.B    '***********************************************'
+0000321A= 0D 0A 00                 142                      DC.B    $0D, $0A, 0
+0000321D                           143                      
+0000321D= 2A 2A 2A 2A 2A 2A ...    144  FRIDGE_MESSAGE:     DC.B    '***********************************************'
+0000324C= 0D 0A                    145                      DC.B    $0D, $0A
+0000324E= 53 41 4C 4D 4F 4E ...    146                      DC.B    'SALMON OR EGG?'
+0000325C= 0D 0A                    147                      DC.B    $0D, $0A
+0000325E= 2A 2A 2A 2A 2A 2A ...    148                      DC.B    '***********************************************'
+0000328D= 0D 0A 00                 149                      DC.B    $0D, $0A, 0
+00003290                           150                      
+00003290= 2A 2A 2A 2A 2A 2A ...    151  ANOMALY_MESSAGE:    DC.B    '***********************************************'
+000032BF= 0D 0A                    152                      DC.B    $0D, $0A
+000032C1= 4F 48 20 4E 4F 21 ...    153                      DC.B    'OH NO! THE CAT ATE SOME OF YOUR SALMON! YOU HAVE LOST FRESHNESS POINTS'
+00003307= 0D 0A                    154                      DC.B    $0D, $0A
+00003309= 2A 2A 2A 2A 2A 2A ...    155                      DC.B    '***********************************************'
+00003338= 0D 0A 00                 156                      DC.B    $0D, $0A, 0
+0000333B                           157                      
+0000333B= 2A 2A 2A 2A 2A 2A ...    158  SPICERACK_MESSAGE:  DC.B    '***********************************************'
+0000336A= 0D 0A                    159                      DC.B    $0D, $0A
+0000336C= 43 48 4F 4F 53 45 ...    160                      DC.B    'CHOOSE YOUR FLAVOUR ENHANCER'
+00003388= 0D 0A                    161                      DC.B    $0D, $0A
+0000338A= 53 4F 59 20 53 41 ...    162                      DC.B    'SOY SAUCE OR WASABI?'
+0000339E= 0D 0A                    163                      DC.B    $0D, $0A
+000033A0= 2A 2A 2A 2A 2A 2A ...    164                      DC.B    '***********************************************'
+000033CF= 0D 0A 00                 165                      DC.B    $0D, $0A, 0
+000033D2                           166                      
+000033D2= 2A 2A 2A 2A 2A 2A ...    167  END_MESSAGE:        DC.B    '***********************************************'
+00003401= 54 48 45 20 45 4E ...    168                      DC.B    'THE ENTITY HAS RETURNED...'
+0000341B= 0D 0A                    169                      DC.B    $0D, $0A
+0000341D= 48 45 20 4C 4F 4F ...    170                      DC.B    'HE LOOKS AT YOUR FOOD, UNIMPRESSED'
+0000343F= 0D 0A                    171                      DC.B    $0D, $0A
+00003441= 54 48 45 20 45 4E ...    172                      DC.B    'THE ENTITY DEVOURS THE FOOD'
+0000345C= 0D 0A                    173                      DC.B    $0D, $0A
+0000345E= 59 4F 55 52 20 46 ...    174                      DC.B    'YOUR FATE AWAITS'
+0000346E= 0D 0A 00                 175                      DC.B    $0D, $0A, 0             
+00003471                           176                      
+00003471= 0D 0A 00                 177  CRLF:               DC.B    $0D, $0A, 0                    
+00003474                           178  
+00003474                           179      END    START        ; last line of source
 
-10 errors detected
+No errors detected
 No warnings generated
 
 
 SYMBOL TABLE INFORMATION
 Symbol-name         Value
 -------------------------
+ANOMALY             3064
+ANOMALY_MESSAGE     3290
 BAD_BOWL            5A
+CLEAR_SCREEN        30AA
+CRLF                3471
+END                 3090
+ENDL                30AA
+END_MESSAGE         33D2
 EXIT                0
+FRIDGE              304E
+FRIDGE_MESSAGE      321D
 GAME                3000
-GAMELOOP            301E
-LARDER              303C
+GAMELOOP            301A
+INPUT               30C0
+LARDER              3038
+LARDER_MESSAGE      31A8
 PERFECT_BOWL        96
+REPLAY              30A6
+SPICERACK           307A
+SPICERACK_MESSAGE   333B
 START               1000
 START_FLAVOUR       64
 START_FRESHNESS     64
 WASABI_HIGH         41
 WASABI_LOW          28
 WELCOME             3006
-WELCOME_MSG         3040
+WELCOME_MSG         30C6
