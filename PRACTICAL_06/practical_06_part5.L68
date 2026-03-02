@@ -1,0 +1,53 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 02/03/2026 15:24:44
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 6 Part 1
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 28/02/2026
+00000000                             5  * Description: Utilise conditional branches and control stuctures
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  
+00001000  2F3C 0000103C              9      MOVE.L  #HEALTH, -(SP)
+00001006  4EB9 00001014             10      JSR     GAME_LOOP
+0000100C  6100 0010                 11      BSR     HEADS_UP_DISPLAY
+00001010  6000 0026                 12      BRA     END
+00001014                            13      
+00001014                            14  GAME_LOOP:
+00001014  226F 0004                 15      MOVEA.L 4(SP),A1
+00001018  0411 000A                 16      SUB.B   #10, (A1)
+0000101C  4E75                      17      RTS
+0000101E                            18  
+0000101E                            19  HEADS_UP_DISPLAY:
+0000101E  43F9 0000103D             20      LEA MESSAGE, A1
+00001024  103C 000E                 21      MOVE.B  #14, D0
+00001028  4E4F                      22      TRAP    #15
+0000102A  1239 0000103C             23      MOVE.B  HEALTH, D1
+00001030  103C 0003                 24      MOVE.B  #3, D0
+00001034  4E4F                      25      TRAP    #15
+00001036  4E75                      26      RTS
+00001038                            27      
+00001038                            28  END: 
+00001038                            29  
+00001038  FFFF FFFF                 30      SIMHALT             ; halt simulator
+0000103C                            31  
+0000103C= 64                        32  HEALTH:     DC.B 100
+0000103D= 48 65 61 6C 74 68 ...     33  MESSAGE:    DC.B 'Health:', 0
+00001045                            34  
+00001045                            35      END    START        ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+END                 1038
+GAME_LOOP           1014
+HEADS_UP_DISPLAY    101E
+HEALTH              103C
+MESSAGE             103D
+START               1000

@@ -6,7 +6,7 @@
 *-----------------------------------------------------------
     ORG    $1000
 START:                  
-    MOVE.L  #HEALTHM -(SP)  ; Note position in stack
+    MOVE.L  #HEALTH, -(SP)  ; Note position in stack
     
     MOVE.B  #14, D0
     MOVE.B  #14, D1
@@ -23,7 +23,7 @@ GAME_LOOP:
     MOVE.L  4(SP), D1   ; Note depth in stack
     MOVE.L  8(SP), D0   ; Note depth in stack
     
-    CMP DO, D1
+    CMP D0, D1
     BEQ DAMAGE
     BRA NO_DAMAGE
     
@@ -40,7 +40,7 @@ HEADS_UP_DISPLAY:
 
     MOVE.B  HEALTH, D1
     MOVE.B  #3, D0
-    TRAP    15
+    TRAP    #15
     RTS
   
 END_GAME
@@ -50,6 +50,7 @@ END_GAME
 HEALTH: DC.B 100
 
     END    START        ; last line of source
+
 
 *~Font name~Courier New~
 *~Font size~10~

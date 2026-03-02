@@ -6,7 +6,7 @@
 *-----------------------------------------------------------
     ORG    $1000
 START:                  
-    MOVE.L  #HEALTHM -(SP)
+    MOVE.L  #HEALTH, -(SP)
     JSR     GAME_LOOP
     BSR     HEADS_UP_DISPLAY
     BRA     END
@@ -24,6 +24,8 @@ HEADS_UP_DISPLAY:
     MOVE.B  #3, D0
     TRAP    #15
     RTS
+    
+END: 
 
     SIMHALT             ; halt simulator
 
@@ -31,6 +33,7 @@ HEALTH:     DC.B 100
 MESSAGE:    DC.B 'Health:', 0
 
     END    START        ; last line of source
+
 
 *~Font name~Courier New~
 *~Font size~10~
