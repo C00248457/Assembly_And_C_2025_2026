@@ -1,0 +1,38 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 02/03/2026 00:07:36
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : Practical 6 Part 1
+00000000                             3  * Written by : Rachel O Shea
+00000000                             4  * Date       : 25/02/2026
+00000000                             5  * Description: Utilise conditional branches and control stuctures
+00000000                             6  *-----------------------------------------------------------
+00001000                             7      ORG    $1000
+00001000                             8  START:                  ; first instruction of program
+00001000                             9  
+00001000                            10      ; Move trap task to D0
+00001000  103C 0010                 11      MOVE.B  #16, D0
+00001004                            12      ; Interrupt and trap task
+00001004  4E4F                      13      TRAP    #15
+00001006                            14      
+00001006                            15     ; Test by allowing input
+00001006  103C 0002                 16      MOVE.B  #2, D0
+0000100A  43F9 00001016             17      LEA MESSAGE_16, A1
+00001010  4E4F                      18      TRAP    #15 
+00001012                            19      
+00001012  FFFF FFFF                 20      SIMHALT
+00001016                            21      
+00001016                            22  MESSAGE_16: DS.B 80
+00001066                            23      
+00001066                            24      END     START
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+MESSAGE_16          1016
+START               1000
