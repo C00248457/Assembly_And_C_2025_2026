@@ -1,6 +1,6 @@
 00001000 Starting Address
 Assembler used: EASy68K Editor/Assembler v5.16.01
-Created On: 06/03/2026 15:30:48
+Created On: 06/03/2026 15:38:54
 
 00000000                             1  *-----------------------------------------------------------
 00000000                             2  * Title      : The Grains of Fate
@@ -567,7 +567,7 @@ Created On: 06/03/2026 15:30:48
 000014DC                           563      
 000014DC  FFFF FFFF                564      SIMHALT                         ; HALT SIMULATOR
 000014E0                           565      
-000014E0= 57 65 6C 63 6F 6D ...    566   ASK_NAME:           DC.B        'Welcome stranger, please state your name'
+000014E0= 57 65 6C 63 6F 6D ...    566  ASK_NAME:               DC.B        'Welcome stranger, please state your name'
 00001508= 0D 0A 00                 567                          DC.B        $0D, $0A, 0
 0000150B                           568  
 0000150C                           569  NAME:                   DS.W        30                                ; DEFINE STORAGE TO A MAX OF 30
