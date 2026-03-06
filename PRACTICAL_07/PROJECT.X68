@@ -1,13 +1,13 @@
 *-----------------------------------------------------------
 * Title      : The Grains of Fate
 * Written by : Rachel O Shea - C00248457
-* Date       : 21/02/2026
+* Date       : 21/02/2026 - 05/03/2026
 * Description: 'Rice' to the occasion as a tiny chef 
 ; responsible for feeding the ancient cosmic entity
 ; that has kidnapped you
 *-----------------------------------------------------------
     ORG    $1000
-EXIT            EQU 0               ; USED TO EXIT THE PROGRAM
+
 BAD_BOWL        EQU 30              ; BAD SCORE
 DECENT_BOWL     EQU 50              ; DECENT BOWL
 PERFECT_BOWL    EQU 70              ; PERFECT BOWL
@@ -16,7 +16,7 @@ START:
 
     CLR         D3                  ; CLEAR REGISTER D3 SO NO LEFTOVER VALUES
     CLR         D4                  ; CLEAR REGISTER D4 SO NO LEFTOVER VALUES
-
+    
     MOVE.B      #13, D0             ; MOVE TRAP TASK TO D0
     LEA         ASK_NAME, A1        ; ASK USER FOR THEIR NAME
     TRAP        #15                 ; INTERRUPT AND TRAP TASK
@@ -25,18 +25,25 @@ START:
     LEA         NAME, A1            ; LOAD NAME TO A1
     TRAP        #15                 ; INTERRUPT AND TRAP TASK
     
+    MOVE.B      #23, D0
+    TRAP        #15
+    MOVE.B      D1, COUNTER
+    
     BSR         CLEAR_SCREEN        ; BRANCH TO CLEAR SCREEN
     BSR         WELCOME             ; BRANCH TO WELCCOME SUBROUTINE 
-    BSR         LARDER              ; BRANCH TO LARDER SUBROUTINE
+    BSR         CLEAR_SCREEN        ; BRANCH TO CLEAR SCREEN
+    BRA         LARDER              ; BRANCH TO LARDER SUBROUTINE
 
 GAME_LOOP:
     CLR         D3
     CLR         D4
     
+    BSR         CLEAR_SCREEN
+    
     MOVE.B      #13, D0
     LEA         NEW_GAME_MSG, A1
     TRAP        #15
-    BSR         LARDER
+    BRA         LARDER
     
 *--------------------WELCOME SUBROUTINE---------------------- 
 WELCOME:
@@ -56,10 +63,14 @@ WELCOME:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY 
+    BSR         CLEAR_SCREEN 
+  
     RTS
     
 *--------------------LARDER SUBROUTINE----------------------
 LARDER:
+    
     LEA         LARDER_MSG, A1      ; LOAD LARDER MESSAGE TO A1
     MOVE.B      #13, D0             
     TRAP        #15
@@ -79,6 +90,7 @@ LARDER:
     
 *--------------------RICE SUBROUTINE------------------------
 RICE:  
+    
     ADD.B       #10, D3         ; ADD RICE FLAVOUR POINTS
     ADD.B       #10, D4         ; ADD RICE FRESHNESS POINTS
     
@@ -86,11 +98,15 @@ RICE:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY
+    BSR         CLEAR_SCREEN
+    
     LEA         FRIDGE_MSG, A1
-    MOVE        #13, D0
+    MOVE.B      #13, D0
     TRAP        #15
     
 RICE_INPUT:
+
     
     MOVE.B      #4, D0
     TRAP        #15
@@ -105,12 +121,16 @@ RICE_INPUT:
 
 *--------------------NOODLES SUBROUTINE----------------------
 NOODLES:
+    
     ADD.B       #15, D3             ; ADD NOODLE FLAVOUR POINTS
     ADD.B       #15, D4             ; ADD NOODLE FRESHNESS POINTS
     
     LEA         NOODLES_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
     
     LEA         FRIDGE_MSG, A1
     MOVE.B      #13, D0
@@ -132,12 +152,16 @@ NOODLES_INPUT:
 
 *--------------------RICE SALMON SUBROUTINE--------------------- 
 RICE_SALMON:
+    
     ADD.B       #15, D3                 ; ADD SALMON FLAVOUR POINTS
     ADD.B       #10, D4                  ; ADD SALMON FRESHNESS POINTS
     
     LEA         RICE_SALMON_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
     
     MOVE.B      #1, D5                  ; STORE VALUE FOR RICE/SALMON IN D5
 
@@ -152,18 +176,24 @@ RICE_EGG:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     MOVE.B      #2, D5                  ; STORE VALUE FOR RICE/EGG IN D5
     
     BRA         SPICE
     
 *--------------------NOODLES SALMON SUBROUTINE--------------------- 
-NOODLES_SALMON:
+NOODLES_SALMON:   
     SUB.B       #5, D3                  ; DEDUCT SALMON FLAVOUR POINTS
     ADD.B       #5, D4                  ; ADD SALMON FRESHNESS POINTS
     
     LEA         NOODLES_SALMON_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
     
     MOVE.B      #3, D5                  ; STORE VALUE FOR NOODLES/SALMON IN D5
     
@@ -178,6 +208,9 @@ NOODLES_EGG:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     MOVE.B      #4, D5                  ; STORE VALUE FOR NOODLES/EGG IN D5
     
     BRA         SPICE
@@ -186,10 +219,9 @@ NOODLES_EGG:
 SPICE:
     LEA         SPICE_MSG, A1
     MOVE.B      #13, D0
-    TRAP        #15
+    TRAP        #15  
     
-SPICE_INPUT:
-    
+SPICE_INPUT:   
     MOVE.B      #4, D0
     TRAP        #15
     
@@ -202,27 +234,33 @@ SPICE_INPUT:
     BRA         SPICE_FAIL_PATH
     
 *--------------------SOY SAUCE SUBROUTINE------------------------------
-SOY_SAUCE:
-    LEA         SOY_SAUCE_MSG, A1
-    MOVE.B      #13, D0
-    TRAP        #15
-    
+SOY_SAUCE:       
     CMP.B       #1, D5              ; IF RICE/SALMON, EXTRA POINTS
     BEQ         SOY_BONUS
     
     CMP.B       #4, D5              ; IF NOODLES/EGG
     BEQ         SOY_BONUS
     
+    LEA         SOY_SAUCE_MSG, A1
+    MOVE.B      #13, D0
+    TRAP        #15
+    
     ADD.B       #10, D3
     ADD.B       #5, D4
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+        
     BRA         MYSTERY_EVENT
     
 *--------------------SOY BONUS SUBROUTINE------------------------------
-SOY_BONUS:
+SOY_BONUS:    
     LEA         SOY_BONUS_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
     
     ADD.B       #20, D3
     ADD.B       #5, D4
@@ -231,7 +269,6 @@ SOY_BONUS:
     
 *--------------------WASABI SUBROUTINE---------------------------------    
 WASABI:
-
     CMP.B       #2, D5              ; IF RICE/EGG
     BEQ         WASABI_BONUS
     
@@ -245,6 +282,9 @@ WASABI:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     ADD.B       #10, D3             ; ADD WASABI FLAVOUR POINTS
     ADD.B       #15, D4             ; ADD WASABI FRESHNESS POINTS
 
@@ -257,15 +297,21 @@ WASABI_BONUS:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     ADD.B       #15, D3
     ADD.B       #10, D4
     BRA         MYSTERY_EVENT
 
 *--------------------WASABI PENALTY SUBROUTINE------------------------
-WASABI_PENALTY:
+WASABI_PENALTY:    
     LEA         WASABI_PENALTY_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
     
     SUB.B       #10, D3
     ADD.B       #5, D4
@@ -275,7 +321,7 @@ WASABI_PENALTY:
 LARDER_FAIL_PATH:
     LEA         FAIL_MSG, A1
     MOVE.B      #13, D0
-    TRAP        #15
+    TRAP        #15   
     BRA         LARDER
     
 *-------------------- RICE FRIDGE FAIL_PATH SUBROUTINE---------------------
@@ -304,27 +350,50 @@ CLEAR_SCREEN:
     MOVE.B      #11, D0
     MOVE.W      #$FF00, D1      ; CLEAR SCREEN
     TRAP        #15
+    
+    MOVE.B      #11, D0
+    MOVE.W      #$0000, D1      ; SET CURSOR POSITION TO TOP LEFT TO AVOID CUTTING OFF TEXT 
+    TRAP        #15
+    
+    RTS
+
+    
+*---------------------PRESS KEY SUBROUTINE------------------------------    
+PRESS_KEY:
+    ADD.B       #1, COUNTER
+    
+    MOVE.B      #11, D0
+    MOVE.W      #$1B1E, D1      ; COLUMN 27, ROW 30 (AVOIDS MISSING LINE)
+    TRAP        #15
+    
+    LEA         PRESS_KEY_MSG, A1
+    MOVE.B      #13, D0
+    TRAP        #15
+    
+    MOVE.B      #5, D0
+    TRAP        #15
+    
     RTS
     
-*--------------------MSYTERY EVENT SUBROUTINE-----------------------------
-MYSTERY_EVENT:
-    MOVE.B      #23, D0         ; GET CURRENT TIME
-    TRAP        #15             ; D1 NOW HAS TIME VALUE
+*--------------------MYSTERY EVENT SUBROUTINE-----------------------------
+MYSTERY_EVENT:    
+    MOVE.B      COUNTER, D1
+    ADD.B       #1, COUNTER
     
-    AND.B       #1, D1          ; CHECK IF EVEN OR ODD
-    CMP.B       #0, D1          ; IF ZERO (EVEN)
+    AND.B       #3, D1              ; SHOULD GIVE 25% CHANCE
+    CMP.B       #1, D1          
     BEQ         MYSTERY_INGREDIENT
     
     BRA         CAT_EVENT
 
-*--------------------MSYTERY INGREDIENT SUBROUTINE-------------------------
+*--------------------MYSTERY INGREDIENT SUBROUTINE-------------------------
 MYSTERY_INGREDIENT:
     LEA         MYSTERY_EVENT_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15 
-
+    
     MOVE.B      #4, D0
-    TRAP        #15
+    TRAP        #15  
 
     CMP.B       #1, D1
     BEQ         MYSTERY_ADD
@@ -333,12 +402,12 @@ MYSTERY_INGREDIENT:
     
 *--------------------MYSTERY_ADD SUBROUTINE--------------------------------  
 MYSTERY_ADD:
-    MOVE.B      #23, D0
-    TRAP        #15
-    
+    MOVE.B      COUNTER, D1
+    ADD.B       #1, COUNTER
+
     AND.B       #1, D1
-    CMP.B       #0, D1
-    
+    CMP.B       #1, D1 
+
     BEQ         MYSTERY_BONUS   ; BRANCH TO BONUS POINTS
     
     BRA         MYSTERY_PENALTY ; OTHERWISE BRANCH TO PENALTY
@@ -349,43 +418,53 @@ MYSTERY_BONUS:
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     ADD.B       #15, D3
     ADD.B       #15, D4 
 
     BRA         CAT_EVENT   
 
-*--------------------MYSTERY BAD SUBROUTINE--------------------------------
+*--------------------MYSTERY PENALTY SUBROUTINE--------------------------------
 MYSTERY_PENALTY:
+    
     LEA         MYSTERY_PENALTY_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
-
+    
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     SUB.B       #10, D3
     SUB.B       #10, D4 
 
     BRA         CAT_EVENT    
 
 *--------------------MYSTERY IGNORE SUBROUTINE-----------------------------
-MYSTERY_IGNORE: 
+MYSTERY_IGNORE:   
     LEA         MYSTERY_IGNORE_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15    
     
+    BSR         PRESS_KEY    
+    BSR         CLEAR_SCREEN
+    
     BRA         CAT_EVENT
     
 *--------------------CAT EVENT SUBROUTINE----------------------------------
-CAT_EVENT:
-    MOVE.B      #23, D0         ; GET CURRENT TIME
-    TRAP        #15             ; D1 NOW HAS TIME VALUE
+CAT_EVENT:   
+    MOVE.B      COUNTER, D1
+    ADD.B       #1, COUNTER
     
-    AND.L       #3, D1          ; CHECK IF EVEN OR ODD
-    CMP.L       #0, D1          ; IF ZERO (EVEN)
+    AND.B       #1, D1          ; 50/50 CHANCE
+    CMP.B       #0, D1
+    
     BEQ         CAT_ATTACKS
-    
     BNE         CAT_SAFE
     
 *--------------------CAT ATTACKS SUBROUTINE--------------------------------
-CAT_ATTACKS:
+CAT_ATTACKS:    
     LEA         CAT_ATTACKS_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
@@ -396,65 +475,106 @@ CAT_ATTACKS:
     BRA         FINAL_COUNT        ; OTHERWISE CAT DOESN'T DO ANYTHING
 
 *--------------------CAT SAFE SUBROUTINE--------------------------------    
-CAT_SAFE:
+CAT_SAFE:    
     LEA         CAT_SAFE_MSG, A1
     MOVE.B      #13, D0
-    TRAP        #15
+    TRAP        #15 
     
     BRA         FINAL_COUNT       ; OTHERWISE CAT DOESN'T DO ANYTHING
 
     
 *--------------------FINAL COUNT SUBROUTINE--------------------------------   
 FINAL_COUNT:
+    BSR         CLEAR_SCREEN
+    
     LEA         ENDING, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    BSR         PRESS_KEY
+    BSR         CLEAR_SCREEN
     
     MOVE.B      D3, D6
     ADD.B       D4, D6
     
     CMP.B       #PERFECT_BOWL, D6
-    BGE         PERFECT_ENDING
+    BHI         PERFECT_ENDING
     
     CMP.B       #DECENT_BOWL, D6
-    BGE         DECENT_ENDING
+    BHI         DECENT_ENDING
     
     BRA         BAD_ENDING
     
 *--------------------FINAL COUNT SUBROUTINE--------------------------------- 
 PERFECT_ENDING:
+    BSR         CLEAR_SCREEN
+    
     LEA         PERFECT_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
+    
+    MOVE.B      #11, D0
+    MOVE.W      #$1B1E, D1
+    TRAP        #15
+    
+    LEA         PRESS_KEY_MSG, A1
+    MOVE.B      #14, D0
+    TRAP        #15
+    
+    MOVE.B      #5, D0
+    TRAP        #15
+    
     SIMHALT
     
 *--------------------FINAL COUNT SUBROUTINE--------------------------------- 
 DECENT_ENDING:
+    BSR         CLEAR_SCREEN
+    
     LEA         DECENT_MSG, A1
     MOVE.B      #13, D0
     TRAP        #15
     
+    BSR         PRESS_KEY
+    
     MOVE.B      #5, D0              ; WAIT FOR USER TO PRESS KEY
-    TRAP        #15
+    TRAP        #15    
     
     BRA         GAME_LOOP
 
 *--------------------FINAL COUNT SUBROUTINE---------------------------------  
-BAD_ENDING:      
+BAD_ENDING:   
+    BSR         CLEAR_SCREEN
+    
     LEA         BAD_MSG, A1
     MOVE.B      #13, D0
-    TRAP        #15     
-    SIMHALT                         ; halt simulator
+    TRAP        #15
+    
+    MOVE.B      #11, D0
+    MOVE.W      #$1B1E, D1
+    TRAP        #15
+    
+    LEA         PRESS_KEY_MSG, A1
+    MOVE.B      #14, D0                 ; TASK 14 - NO LINE FEED
+    TRAP        #15
+    
+    MOVE.B      #5, D0
+    TRAP        #15
+    
+    SIMHALT
 
 ASK_NAME:       DC.B        'Welcome stranger, please state your name'
                 DC.B        $0D, $0A, 0
 
 NAME:           DS.W        30                                ; DEFINE STORAGE TO A MAX OF 30
 
-WELCOME_MSG:    DC.B        'Greetings ',0   
+COUNTER:        DC.B        0                                   ;RANDOM EVENT COUNTER
+
+WELCOME_MSG:    DC.B        'Greetings ',0 
+
+PRESS_KEY_MSG:  DC.B        'PRESS ANY KEY TO CONTINUE',0 
                             
 INTRODUCTION:   DC.B        $0D, $0A
-                DC.B '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+                DC.B        '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
                 DC.B        $0D, $0A
                 DC.B        $0D, $0A
                 DC.B        'BREAKING NEWS: YOU HAVE BEEN KIDNAPPED BY A COSMIC ENTITY!'
@@ -473,15 +593,16 @@ INTRODUCTION:   DC.B        $0D, $0A
 
 LARDER_MSG:         DC.B    '                     <><><><><><><><><><><><><><><><><><><>  ' 
                     DC.B    $0D,$0A
-                    DC.B    '                        TRIAL ONE - RICE TO THE OCCASION'
+                    DC.B    '                        TRIAL ONE - RICE TO THE OCCASION      '
                     DC.B    $0D,$0A    
                     DC.B    '                     <><><><><><><><><><><><><><><><><><><>  '
                     DC.B    $0D,$0A  
-                    DC.B    $0D, $0A 
+                    DC.B    $0D,$0A 
                     DC.B    'WHAT GRAIN WILL YOU COOK?'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A
-                    DC.B    'RICE (1) OR RAMEN NOODLES (2)', 0
+                    DC.B    'RICE (1) OR RAMEN NOODLES (2)'
+                    DC.B    $0D, $0A, 0
                 
 RICE_MSG:           DC.B    $0D, $0A
                     DC.B    'AH, RICE. A CLASSIC! SIMPLE, ELEGANT, SOME MIGHT SAY BRAVE'
@@ -542,7 +663,7 @@ FRIDGE_MSG:         DC.B    '                  <><><><><><><><><><><><><><><><><
 NOODLES_SALMON_MSG: DC.B    $0D, $0A
                     DC.B    'NOODLES AND SALMON... THE ENTITY SQUINTS'
                     DC.B    $0D, $0A
-                    DC.B    'ONE OF HIS SEVENTEEN EYES TWITCHES SLIGHTLLY'
+                    DC.B    'ONE OF HIS SEVENTEEN EYES TWITCHES SLIGHTLY'
                     DC.B    $0D, $0A
                     DC.B    '-5 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
                     DC.B    $0D, $0A, 0
@@ -563,7 +684,7 @@ SPICE_MSG:          DC.B    '                   <><><><><><><><><><><><><><><><>
                     DC.B    '                   <><><><><><><><><><><><><><><><><><><><><><><>    '
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A
-                    DC.B    'SOY SAUCE (1) OR WASABI(2)' ,0 
+                    DC.B    'SOY SAUCE (1) OR WASABI(2)'
                     DC.B    $0D, $0A                    
                     DC.B    $0D, $0A, 0  
     
@@ -665,7 +786,10 @@ MYSTERY_IGNORE_MSG:     DC.B    $0D, $0A
                         DC.B    $0D, $0A, 0
                  
                     
-ENDING:             DC.B    'THE ENTITY LIFTS THE BOWL SLOWLY'
+ENDING:             DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+                    DC.B    $0D, $0A  
+                    DC.B    $0D, $0A  
+                    DC.B    'THE ENTITY LIFTS THE BOWL SLOWLY'
                     DC.B    $0D, $0A  
                     DC.B    'HE EXAMINES IT FROM EVERY ANGLE WITH HIS SEVENTEEN EYES'
                     DC.B    $0D, $0A           
@@ -677,32 +801,34 @@ ENDING:             DC.B    'THE ENTITY LIFTS THE BOWL SLOWLY'
                     DC.B    $0D, $0A
                     DC.B    'HE TAKES A BITE'
                     DC.B    $0D, $0A
+                    DC.B    $0D, $0A  
+                    DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A, 0            
                     
                     
-PERFECT_MSG:        DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+PERFECT_MSG:        DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A
                     DC.B    'THE ENTITY SETS DOWN HIS MEAL WITH A CLANG' 
                     DC.B    $0D, $0A
                     DC.B    'A SINGLE TEAR ROLLS DOWN HIS (COSMIC) FACE'
                     DC.B    $0D, $0A
-                    DC.B    '"IN FOUR THOUSAND YEARS," HE WHISPERS "NO ONE HAS EVER..."'
+                    DC.B    '"IN FOUR THOUSAND YEARS," HE WHISPERS "THIS IS MY FAVOURITE MEAL..."'
                     DC.B    $0D, $0A
                     DC.B    'HE COMPOSES HIMSELF'
                     DC.B    $0D, $0A
-                    DC.B    '"YOU MAY CALL HE GERALD"'
+                    DC.B    '"YOU MAY CALL ME GERALD"'
                     DC.B    $0D, $0A
-                    DC.B    '"NOW LEAVE, BEFORE I CHANGE MY MIND!'
+                    DC.B    '"NOW LEAVE, BEFORE I CHANGE MY MIND!"'
                     DC.B    $0D, $0A
                     DC.B    'HE SOBS AS HE DESCENDS INTO THE DEPTHS FROM WHENCE HE CAME'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A                    
-                    DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+                    DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A, 0 
                     
 
-DECENT_MSG:         DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+DECENT_MSG:         DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A
                     DC.B    'THE ENTITY POKES THE BOWL'
@@ -714,14 +840,11 @@ DECENT_MSG:         DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><>
                     DC.B    '"I WILL RETURN TOMORROW. I HOPE YOU WILL DO BETTER"'
                     DC.B    $0D, $0A
                     DC.B    'THE CAT FINISHES THE MEAL. THE CAT ENJOYS IT'
-                    DC.B    $0D, $0A
-                    DC.B    $0D, $0A   
-                    DC.B    'PRESS ANY KEY TO CONTINUE'
+                    DC.B    $0D, $0A 
                     DC.B    $0D, $0A                 
-                    DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'  
-                    DC.B    $0D, $0A, 0   
+                    DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>',0     
 
-BAD_MSG:            DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+BAD_MSG:            DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A
                     DC.B    'THE ENTITY STARES AT THE BOWL FOR A VERY LONG TIME'
@@ -739,7 +862,7 @@ BAD_MSG:            DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><>
                     DC.B    'THE CAT ALWAYS SURVIVES'
                     DC.B    $0D, $0A
                     DC.B    $0D, $0A                   
-                    DC.B    '><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+                    DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
                     DC.B    $0D, $0A, 0    
 
 NEW_GAME_MSG:       DC.B    $0D, $0A
@@ -751,6 +874,7 @@ NEW_GAME_MSG:       DC.B    $0D, $0A
                 
     
     END         START                ; last line of source
+
 
 
 
