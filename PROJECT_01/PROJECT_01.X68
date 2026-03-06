@@ -563,7 +563,7 @@ BAD_ENDING:
     
     SIMHALT                         ; HALT SIMULATOR
     
- ASK_NAME:           DC.B        'Welcome stranger, please state your name'
+ASK_NAME:               DC.B        'Welcome stranger, please state your name'
                         DC.B        $0D, $0A, 0
 
 NAME:                   DS.W        30                                ; DEFINE STORAGE TO A MAX OF 30
@@ -875,6 +875,7 @@ NEW_GAME_MSG:           DC.B    $0D, $0A
                 
     
     END         START                ; last line of source    
+
 *~Font name~Courier New~
 *~Font size~10~
 *~Tab type~1~
