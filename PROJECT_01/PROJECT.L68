@@ -1,0 +1,961 @@
+00001000 Starting Address
+Assembler used: EASy68K Editor/Assembler v5.16.01
+Created On: 06/03/2026 06:19:38
+
+00000000                             1  *-----------------------------------------------------------
+00000000                             2  * Title      : The Grains of Fate
+00000000                             3  * Written by : Rachel O Shea - C00248457
+00000000                             4  * Date       : 21/02/2026 - 05/03/2026
+00000000                             5  * Description: 'Rice' to the occasion as a tiny chef 
+00000000                             6  ; responsible for feeding the ancient cosmic entity
+00000000                             7  ; that has kidnapped you
+00000000                             8  *-----------------------------------------------------------
+00001000                             9      ORG    $1000
+00001000                            10  
+00001000  =0000001E                 11  BAD_BOWL        EQU 30              ; BAD SCORE
+00001000  =00000032                 12  DECENT_BOWL     EQU 50              ; DECENT BOWL
+00001000  =00000046                 13  PERFECT_BOWL    EQU 70              ; PERFECT BOWL
+00001000                            14  
+00001000                            15  START:  
+00001000                            16  
+00001000  4243                      17      CLR         D3                  ; CLEAR REGISTER D3 SO NO LEFTOVER VALUES
+00001002  4244                      18      CLR         D4                  ; CLEAR REGISTER D4 SO NO LEFTOVER VALUES
+00001004                            19      
+00001004  103C 000D                 20      MOVE.B      #13, D0             ; MOVE TRAP TASK TO D0
+00001008  43F9 000014BA             21      LEA         ASK_NAME, A1        ; ASK USER FOR THEIR NAME
+0000100E  4E4F                      22      TRAP        #15                 ; INTERRUPT AND TRAP TASK
+00001010                            23                          
+00001010  103C 0002                 24      MOVE.B      #2, D0              ; MOVE TRAP TASK TO D0
+00001014  43F9 000014E6             25      LEA         NAME, A1            ; LOAD NAME TO A1
+0000101A  4E4F                      26      TRAP        #15                 ; INTERRUPT AND TRAP TASK
+0000101C                            27      
+0000101C  103C 0017                 28      MOVE.B      #23, D0
+00001020  4E4F                      29      TRAP        #15
+00001022  13C1 00001522             30      MOVE.B      D1, COUNTER
+00001028                            31      
+00001028  6100 02B8                 32      BSR         CLEAR_SCREEN        ; BRANCH TO CLEAR SCREEN
+0000102C  6100 0022                 33      BSR         WELCOME             ; BRANCH TO WELCCOME SUBROUTINE 
+00001030  6100 02B0                 34      BSR         CLEAR_SCREEN        ; BRANCH TO CLEAR SCREEN
+00001034  6000 0052                 35      BRA         LARDER              ; BRANCH TO LARDER SUBROUTINE
+00001038                            36  
+00001038                            37  GAME_LOOP:
+00001038  4243                      38      CLR         D3
+0000103A  4244                      39      CLR         D4
+0000103C                            40      
+0000103C  6100 02A4                 41      BSR         CLEAR_SCREEN
+00001040                            42      
+00001040  103C 000D                 43      MOVE.B      #13, D0
+00001044  43F9 000028C1             44      LEA         NEW_GAME_MSG, A1
+0000104A  4E4F                      45      TRAP        #15
+0000104C  6000 003A                 46      BRA         LARDER
+00001050                            47      
+00001050                            48  *--------------------WELCOME SUBROUTINE---------------------- 
+00001050                            49  WELCOME:
+00001050  103C 000B                 50      MOVE.B      #11, D0
+00001054  323C 2001                 51      MOVE.W      #$2001, D1          ; COLUMN 37 ($25) ROW 0 ($0)
+00001058  4E4F                      52      TRAP        #15
+0000105A                            53      
+0000105A  43F9 00001523             54      LEA         WELCOME_MSG, A1     ; LOAD WELCOME MESSAGE TO A1
+00001060  103C 000E                 55      MOVE.B      #14, D0
+00001064  4E4F                      56      TRAP        #15
+00001066                            57                                             
+00001066  43F9 000014E6             58      LEA         NAME, A1
+0000106C  103C 000D                 59      MOVE.B      #13, D0
+00001070  4E4F                      60      TRAP        #15
+00001072                            61      
+00001072  43F9 00001548             62      LEA         INTRODUCTION, A1
+00001078  103C 000D                 63      MOVE.B      #13, D0
+0000107C  4E4F                      64      TRAP        #15
+0000107E                            65      
+0000107E  6100 0278                 66      BSR         PRESS_KEY 
+00001082  6100 025E                 67      BSR         CLEAR_SCREEN 
+00001086                            68    
+00001086  4E75                      69      RTS
+00001088                            70      
+00001088                            71  *--------------------LARDER SUBROUTINE----------------------
+00001088                            72  LARDER:
+00001088                            73      
+00001088  43F9 000016C1             74      LEA         LARDER_MSG, A1      ; LOAD LARDER MESSAGE TO A1
+0000108E  103C 000D                 75      MOVE.B      #13, D0             
+00001092  4E4F                      76      TRAP        #15
+00001094                            77      
+00001094  103C 0004                 78      MOVE.B      #4, D0
+00001098  4E4F                      79      TRAP        #15
+0000109A                            80      
+0000109A  B27C 0001                 81      CMP         #1, D1              ; COMPARE CHOICE TO 1
+0000109E  6700 000E                 82      BEQ         RICE                ; BRANCH TO RICE IF 1
+000010A2                            83      
+000010A2  B27C 0002                 84      CMP         #2, D1              ; COMPARE CHOICE TO 2
+000010A6  6700 0048                 85      BEQ         NOODLES             ; BRANCH TO NOODLES IF 2
+000010AA                            86    
+000010AA  6000 01F6                 87      BRA         LARDER_FAIL_PATH           ; VALIDATION CHECK
+000010AE                            88      
+000010AE                            89      
+000010AE                            90      
+000010AE                            91  *--------------------RICE SUBROUTINE------------------------
+000010AE                            92  RICE:  
+000010AE                            93      
+000010AE  0603 000A                 94      ADD.B       #10, D3         ; ADD RICE FLAVOUR POINTS
+000010B2  0604 000A                 95      ADD.B       #10, D4         ; ADD RICE FRESHNESS POINTS
+000010B6                            96      
+000010B6  43F9 000017BE             97      LEA         RICE_MSG, A1
+000010BC  103C 000D                 98      MOVE.B      #13, D0
+000010C0  4E4F                      99      TRAP        #15
+000010C2                           100      
+000010C2  6100 0234                101      BSR         PRESS_KEY
+000010C6  6100 021A                102      BSR         CLEAR_SCREEN
+000010CA                           103      
+000010CA  43F9 00001A85            104      LEA         FRIDGE_MSG, A1
+000010D0  103C 000D                105      MOVE.B      #13, D0
+000010D4  4E4F                     106      TRAP        #15
+000010D6                           107      
+000010D6                           108  RICE_INPUT:
+000010D6                           109  
+000010D6                           110      
+000010D6  103C 0004                111      MOVE.B      #4, D0
+000010DA  4E4F                     112      TRAP        #15
+000010DC                           113      
+000010DC  B27C 0001                114      CMP         #1, D1              ; COMPARE CHOICE TO 1
+000010E0  6700 0050                115      BEQ         RICE_SALMON
+000010E4                           116      
+000010E4  B27C 0002                117      CMP         #2, D1
+000010E8  6700 006C                118      BEQ         RICE_EGG
+000010EC                           119      
+000010EC  6000 01C4                120      BRA         RICE_FRIDGE_FAIL
+000010F0                           121  
+000010F0                           122  *--------------------NOODLES SUBROUTINE----------------------
+000010F0                           123  NOODLES:
+000010F0                           124      
+000010F0  0603 000F                125      ADD.B       #15, D3             ; ADD NOODLE FLAVOUR POINTS
+000010F4  0604 000F                126      ADD.B       #15, D4             ; ADD NOODLE FRESHNESS POINTS
+000010F8                           127      
+000010F8  43F9 0000185B            128      LEA         NOODLES_MSG, A1
+000010FE  103C 000D                129      MOVE.B      #13, D0
+00001102  4E4F                     130      TRAP        #15
+00001104                           131      
+00001104  6100 01F2                132      BSR         PRESS_KEY    
+00001108  6100 01D8                133      BSR         CLEAR_SCREEN
+0000110C                           134      
+0000110C  43F9 00001A85            135      LEA         FRIDGE_MSG, A1
+00001112  103C 000D                136      MOVE.B      #13, D0
+00001116  4E4F                     137      TRAP        #15
+00001118                           138      
+00001118                           139  NOODLES_INPUT:
+00001118                           140      
+00001118  103C 0004                141      MOVE.B      #4, D0
+0000111C  4E4F                     142      TRAP        #15
+0000111E                           143      
+0000111E  B27C 0001                144      CMP         #1, D1              ; COMPARE CHOICE TO 1
+00001122  6700 0054                145      BEQ         NOODLES_SALMON
+00001126                           146      
+00001126  B27C 0002                147      CMP         #2, D1
+0000112A  6700 006C                148      BEQ         NOODLES_EGG
+0000112E                           149      
+0000112E  6000 0192                150      BRA         NOODLES_FRIDGE_FAIL
+00001132                           151      
+00001132                           152  
+00001132                           153  *--------------------RICE SALMON SUBROUTINE--------------------- 
+00001132                           154  RICE_SALMON:
+00001132                           155      
+00001132  0603 000F                156      ADD.B       #15, D3                 ; ADD SALMON FLAVOUR POINTS
+00001136  0604 000A                157      ADD.B       #10, D4                  ; ADD SALMON FRESHNESS POINTS
+0000113A                           158      
+0000113A  43F9 00001902            159      LEA         RICE_SALMON_MSG, A1
+00001140  103C 000D                160      MOVE.B      #13, D0
+00001144  4E4F                     161      TRAP        #15
+00001146                           162      
+00001146  6100 01B0                163      BSR         PRESS_KEY    
+0000114A  6100 0196                164      BSR         CLEAR_SCREEN
+0000114E                           165      
+0000114E  1A3C 0001                166      MOVE.B      #1, D5                  ; STORE VALUE FOR RICE/SALMON IN D5
+00001152                           167  
+00001152  6000 0066                168      BRA         SPICE
+00001156                           169  
+00001156                           170  *--------------------RICE EGG SUBROUTINE---------------------------
+00001156                           171  RICE_EGG:
+00001156  5A03                     172      ADD.B       #5, D3              ; ADD EGG FLAVOUR POINTS
+00001158  0604 000A                173      ADD.B       #10, D4             ; ADD EGG FRESHNESS POINTS
+0000115C                           174      
+0000115C  43F9 00001994            175      LEA         RICE_EGG_MSG, A1
+00001162  103C 000D                176      MOVE.B      #13, D0
+00001166  4E4F                     177      TRAP        #15
+00001168                           178      
+00001168  6100 018E                179      BSR         PRESS_KEY    
+0000116C  6100 0174                180      BSR         CLEAR_SCREEN
+00001170                           181      
+00001170  1A3C 0002                182      MOVE.B      #2, D5                  ; STORE VALUE FOR RICE/EGG IN D5
+00001174                           183      
+00001174  6000 0044                184      BRA         SPICE
+00001178                           185      
+00001178                           186  *--------------------NOODLES SALMON SUBROUTINE--------------------- 
+00001178                           187  NOODLES_SALMON:   
+00001178  5B03                     188      SUB.B       #5, D3                  ; DEDUCT SALMON FLAVOUR POINTS
+0000117A  5A04                     189      ADD.B       #5, D4                  ; ADD SALMON FRESHNESS POINTS
+0000117C                           190      
+0000117C  43F9 00001B76            191      LEA         NOODLES_SALMON_MSG, A1
+00001182  103C 000D                192      MOVE.B      #13, D0
+00001186  4E4F                     193      TRAP        #15
+00001188                           194      
+00001188  6100 016E                195      BSR         PRESS_KEY    
+0000118C  6100 0154                196      BSR         CLEAR_SCREEN
+00001190                           197      
+00001190  1A3C 0003                198      MOVE.B      #3, D5                  ; STORE VALUE FOR NOODLES/SALMON IN D5
+00001194                           199      
+00001194  6000 0024                200      BRA         SPICE
+00001198                           201      
+00001198                           202  *--------------------NOODLES EGG SUBROUTINE--------------------------
+00001198                           203  NOODLES_EGG:
+00001198  5A03                     204      ADD.B       #5, D3              ; ADD EGG FLAVOUR POINTS
+0000119A  0604 000A                205      ADD.B       #10, D4             ; ADD EGG FRESHNESS POINTS
+0000119E                           206      
+0000119E  43F9 00001BFA            207      LEA         NOODLES_EGG_MSG, A1
+000011A4  103C 000D                208      MOVE.B      #13, D0
+000011A8  4E4F                     209      TRAP        #15
+000011AA                           210      
+000011AA  6100 014C                211      BSR         PRESS_KEY    
+000011AE  6100 0132                212      BSR         CLEAR_SCREEN
+000011B2                           213      
+000011B2  1A3C 0004                214      MOVE.B      #4, D5                  ; STORE VALUE FOR NOODLES/EGG IN D5
+000011B6                           215      
+000011B6  6000 0002                216      BRA         SPICE
+000011BA                           217      
+000011BA                           218  *--------------------SPICE SUBROUTINE--------------------------------
+000011BA                           219  SPICE:
+000011BA  43F9 00001C9B            220      LEA         SPICE_MSG, A1
+000011C0  103C 000D                221      MOVE.B      #13, D0
+000011C4  4E4F                     222      TRAP        #15  
+000011C6                           223      
+000011C6                           224  SPICE_INPUT:   
+000011C6  103C 0004                225      MOVE.B      #4, D0
+000011CA  4E4F                     226      TRAP        #15
+000011CC                           227      
+000011CC  B23C 0001                228      CMP.B       #1, D1
+000011D0  6700 000E                229      BEQ         SOY_SAUCE
+000011D4                           230      
+000011D4  B23C 0002                231      CMP.B       #2, D1
+000011D8  6700 0052                232      BEQ         WASABI
+000011DC                           233  
+000011DC  6000 00F4                234      BRA         SPICE_FAIL_PATH
+000011E0                           235      
+000011E0                           236  *--------------------SOY SAUCE SUBROUTINE------------------------------
+000011E0                           237  SOY_SAUCE:       
+000011E0  BA3C 0001                238      CMP.B       #1, D5              ; IF RICE/SALMON, EXTRA POINTS
+000011E4  6700 0028                239      BEQ         SOY_BONUS
+000011E8                           240      
+000011E8  BA3C 0004                241      CMP.B       #4, D5              ; IF NOODLES/EGG
+000011EC  6700 0020                242      BEQ         SOY_BONUS
+000011F0                           243      
+000011F0  43F9 00001D8B            244      LEA         SOY_SAUCE_MSG, A1
+000011F6  103C 000D                245      MOVE.B      #13, D0
+000011FA  4E4F                     246      TRAP        #15
+000011FC                           247      
+000011FC  0603 000A                248      ADD.B       #10, D3
+00001200  5A04                     249      ADD.B       #5, D4
+00001202                           250      
+00001202  6100 00F4                251      BSR         PRESS_KEY    
+00001206  6100 00DA                252      BSR         CLEAR_SCREEN
+0000120A                           253          
+0000120A  6000 0110                254      BRA         MYSTERY_EVENT
+0000120E                           255      
+0000120E                           256  *--------------------SOY BONUS SUBROUTINE------------------------------
+0000120E                           257  SOY_BONUS:    
+0000120E  43F9 00001F54            258      LEA         SOY_BONUS_MSG, A1
+00001214  103C 000D                259      MOVE.B      #13, D0
+00001218  4E4F                     260      TRAP        #15
+0000121A                           261      
+0000121A  6100 00DC                262      BSR         PRESS_KEY    
+0000121E  6100 00C2                263      BSR         CLEAR_SCREEN
+00001222                           264      
+00001222  0603 0014                265      ADD.B       #20, D3
+00001226  5A04                     266      ADD.B       #5, D4
+00001228                           267  
+00001228  6000 00F2                268      BRA         MYSTERY_EVENT       
+0000122C                           269      
+0000122C                           270  *--------------------WASABI SUBROUTINE---------------------------------    
+0000122C                           271  WASABI:
+0000122C  BA3C 0002                272      CMP.B       #2, D5              ; IF RICE/EGG
+00001230  6700 0032                273      BEQ         WASABI_BONUS
+00001234                           274      
+00001234  BA3C 0004                275      CMP.B       #4, D5              ; IF NOODLES/EGG
+00001238  6700 002A                276      BEQ         WASABI_BONUS
+0000123C                           277      
+0000123C  BA3C 0001                278      CMP.B       #1, D5              ; IF RICE/SALMON
+00001240  6700 0042                279      BEQ         WASABI_PENALTY
+00001244                           280      
+00001244  43F9 00001E6F            281      LEA         WASABI_MSG, A1
+0000124A  103C 000D                282      MOVE.B      #13, D0
+0000124E  4E4F                     283      TRAP        #15
+00001250                           284      
+00001250  6100 00A6                285      BSR         PRESS_KEY    
+00001254  6100 008C                286      BSR         CLEAR_SCREEN
+00001258                           287      
+00001258  0603 000A                288      ADD.B       #10, D3             ; ADD WASABI FLAVOUR POINTS
+0000125C  0604 000F                289      ADD.B       #15, D4             ; ADD WASABI FRESHNESS POINTS
+00001260                           290  
+00001260                           291      
+00001260  6000 00BA                292      BRA         MYSTERY_EVENT
+00001264                           293      
+00001264                           294  *--------------------WASABI BONUS SUBROUTINE--------------------------
+00001264                           295  WASABI_BONUS:
+00001264  43F9 00001DDE            296      LEA         WASABI_BONUS_MSG, A1
+0000126A  103C 000D                297      MOVE.B      #13, D0
+0000126E  4E4F                     298      TRAP        #15
+00001270                           299      
+00001270  6100 0086                300      BSR         PRESS_KEY    
+00001274  6100 006C                301      BSR         CLEAR_SCREEN
+00001278                           302      
+00001278  0603 000F                303      ADD.B       #15, D3
+0000127C  0604 000A                304      ADD.B       #10, D4
+00001280  6000 009A                305      BRA         MYSTERY_EVENT
+00001284                           306  
+00001284                           307  *--------------------WASABI PENALTY SUBROUTINE------------------------
+00001284                           308  WASABI_PENALTY:    
+00001284  43F9 00001EBE            309      LEA         WASABI_PENALTY_MSG, A1
+0000128A  103C 000D                310      MOVE.B      #13, D0
+0000128E  4E4F                     311      TRAP        #15
+00001290                           312      
+00001290  6100 0066                313      BSR         PRESS_KEY    
+00001294  6100 004C                314      BSR         CLEAR_SCREEN
+00001298                           315      
+00001298  0403 000A                316      SUB.B       #10, D3
+0000129C  5A04                     317      ADD.B       #5, D4
+0000129E  6000 007C                318      BRA         MYSTERY_EVENT    
+000012A2                           319      
+000012A2                           320  *-------------------- LARDER FAIL_PATH SUBROUTINE---------------------
+000012A2                           321  LARDER_FAIL_PATH:
+000012A2  43F9 000018F1            322      LEA         FAIL_MSG, A1
+000012A8  103C 000D                323      MOVE.B      #13, D0
+000012AC  4E4F                     324      TRAP        #15   
+000012AE  6000 FDD8                325      BRA         LARDER
+000012B2                           326      
+000012B2                           327  *-------------------- RICE FRIDGE FAIL_PATH SUBROUTINE---------------------
+000012B2                           328  RICE_FRIDGE_FAIL:
+000012B2  43F9 000018F1            329      LEA         FAIL_MSG, A1
+000012B8  103C 000D                330      MOVE.B      #13, D0
+000012BC  4E4F                     331      TRAP        #15
+000012BE  6000 FE16                332      BRA         RICE_INPUT
+000012C2                           333      
+000012C2                           334  *-------------------- NOODLES FRIDGE FAIL_PATH SUBROUTINE-------------------
+000012C2                           335  NOODLES_FRIDGE_FAIL:
+000012C2  43F9 000018F1            336      LEA         FAIL_MSG, A1
+000012C8  103C 000D                337      MOVE.B      #13, D0
+000012CC  4E4F                     338      TRAP        #15
+000012CE  6000 FE48                339      BRA         NOODLES_INPUT
+000012D2                           340      
+000012D2                           341  *-------------------- SPICE FAIL_PATH SUBROUTINE---------------------------
+000012D2                           342  SPICE_FAIL_PATH:
+000012D2  43F9 000018F1            343      LEA         FAIL_MSG, A1
+000012D8  103C 000D                344      MOVE.B      #13, D0
+000012DC  4E4F                     345      TRAP        #15
+000012DE  6000 FEE6                346      BRA         SPICE_INPUT
+000012E2                           347      
+000012E2                           348  *---------------------CLEAR SCREEN SUBROUTINE------------------------------
+000012E2                           349  CLEAR_SCREEN:
+000012E2  103C 000B                350      MOVE.B      #11, D0
+000012E6  323C FF00                351      MOVE.W      #$FF00, D1      ; CLEAR SCREEN
+000012EA  4E4F                     352      TRAP        #15
+000012EC                           353      
+000012EC  103C 000B                354      MOVE.B      #11, D0
+000012F0  323C 0000                355      MOVE.W      #$0000, D1      ; SET CURSOR POSITION TO TOP LEFT TO AVOID CUTTING OFF TEXT 
+000012F4  4E4F                     356      TRAP        #15
+000012F6                           357      
+000012F6  4E75                     358      RTS
+000012F8                           359  
+000012F8                           360      
+000012F8                           361  *---------------------PRESS KEY SUBROUTINE------------------------------    
+000012F8                           362  PRESS_KEY:
+000012F8  5239 00001522            363      ADD.B       #1, COUNTER
+000012FE                           364      
+000012FE  103C 000B                365      MOVE.B      #11, D0
+00001302  323C 1B1E                366      MOVE.W      #$1B1E, D1      ; COLUMN 27, ROW 30 (AVOIDS MISSING LINE)
+00001306  4E4F                     367      TRAP        #15
+00001308                           368      
+00001308  43F9 0000152E            369      LEA         PRESS_KEY_MSG, A1
+0000130E  103C 000D                370      MOVE.B      #13, D0
+00001312  4E4F                     371      TRAP        #15
+00001314                           372      
+00001314  103C 0005                373      MOVE.B      #5, D0
+00001318  4E4F                     374      TRAP        #15
+0000131A                           375      
+0000131A  4E75                     376      RTS
+0000131C                           377      
+0000131C                           378  *--------------------MYSTERY EVENT SUBROUTINE-----------------------------
+0000131C                           379  MYSTERY_EVENT:    
+0000131C  1239 00001522            380      MOVE.B      COUNTER, D1
+00001322  5239 00001522            381      ADD.B       #1, COUNTER
+00001328                           382      
+00001328  C23C 0003                383      AND.B       #3, D1              ; SHOULD GIVE 25% CHANCE
+0000132C  B23C 0001                384      CMP.B       #1, D1          
+00001330  6700 0006                385      BEQ         MYSTERY_INGREDIENT
+00001334                           386      
+00001334  6000 0094                387      BRA         CAT_EVENT
+00001338                           388  
+00001338                           389  *--------------------MYSTERY INGREDIENT SUBROUTINE-------------------------
+00001338                           390  MYSTERY_INGREDIENT:
+00001338  43F9 000020E6            391      LEA         MYSTERY_EVENT_MSG, A1
+0000133E  103C 000D                392      MOVE.B      #13, D0
+00001342  4E4F                     393      TRAP        #15 
+00001344                           394      
+00001344  103C 0004                395      MOVE.B      #4, D0
+00001348  4E4F                     396      TRAP        #15  
+0000134A                           397  
+0000134A  B23C 0001                398      CMP.B       #1, D1
+0000134E  6700 0006                399      BEQ         MYSTERY_ADD
+00001352                           400      
+00001352  6000 005E                401      BRA         MYSTERY_IGNORE
+00001356                           402      
+00001356                           403  *--------------------MYSTERY_ADD SUBROUTINE--------------------------------  
+00001356                           404  MYSTERY_ADD:
+00001356  1239 00001522            405      MOVE.B      COUNTER, D1
+0000135C  5239 00001522            406      ADD.B       #1, COUNTER
+00001362                           407  
+00001362  C23C 0001                408      AND.B       #1, D1
+00001366  B23C 0001                409      CMP.B       #1, D1 
+0000136A                           410  
+0000136A  6700 0006                411      BEQ         MYSTERY_BONUS   ; BRANCH TO BONUS POINTS
+0000136E                           412      
+0000136E  6000 0022                413      BRA         MYSTERY_PENALTY ; OTHERWISE BRANCH TO PENALTY
+00001372                           414      
+00001372                           415  *--------------------MYSTERY GOOD SUBROUTINE-------------------------------
+00001372                           416  MYSTERY_BONUS:   
+00001372  43F9 00002166            417      LEA         MYSTERY_BONUS_MSG, A1
+00001378  103C 000D                418      MOVE.B      #13, D0
+0000137C  4E4F                     419      TRAP        #15
+0000137E                           420      
+0000137E  6100 FF78                421      BSR         PRESS_KEY    
+00001382  6100 FF5E                422      BSR         CLEAR_SCREEN
+00001386                           423      
+00001386  0603 000F                424      ADD.B       #15, D3
+0000138A  0604 000F                425      ADD.B       #15, D4 
+0000138E                           426  
+0000138E  6000 003A                427      BRA         CAT_EVENT   
+00001392                           428  
+00001392                           429  *--------------------MYSTERY PENALTY SUBROUTINE--------------------------------
+00001392                           430  MYSTERY_PENALTY:
+00001392                           431      
+00001392  43F9 000021A6            432      LEA         MYSTERY_PENALTY_MSG, A1
+00001398  103C 000D                433      MOVE.B      #13, D0
+0000139C  4E4F                     434      TRAP        #15
+0000139E                           435      
+0000139E  6100 FF58                436      BSR         PRESS_KEY    
+000013A2  6100 FF3E                437      BSR         CLEAR_SCREEN
+000013A6                           438      
+000013A6  0403 000A                439      SUB.B       #10, D3
+000013AA  0404 000A                440      SUB.B       #10, D4 
+000013AE                           441  
+000013AE  6000 001A                442      BRA         CAT_EVENT    
+000013B2                           443  
+000013B2                           444  *--------------------MYSTERY IGNORE SUBROUTINE-----------------------------
+000013B2                           445  MYSTERY_IGNORE:   
+000013B2  43F9 0000221F            446      LEA         MYSTERY_IGNORE_MSG, A1
+000013B8  103C 000D                447      MOVE.B      #13, D0
+000013BC  4E4F                     448      TRAP        #15    
+000013BE                           449      
+000013BE  6100 FF38                450      BSR         PRESS_KEY    
+000013C2  6100 FF1E                451      BSR         CLEAR_SCREEN
+000013C6                           452      
+000013C6  6000 0002                453      BRA         CAT_EVENT
+000013CA                           454      
+000013CA                           455  *--------------------CAT EVENT SUBROUTINE----------------------------------
+000013CA                           456  CAT_EVENT:   
+000013CA  1239 00001522            457      MOVE.B      COUNTER, D1
+000013D0  5239 00001522            458      ADD.B       #1, COUNTER
+000013D6                           459      
+000013D6  C23C 0001                460      AND.B       #1, D1          ; 50/50 CHANCE
+000013DA  B23C 0000                461      CMP.B       #0, D1
+000013DE                           462      
+000013DE  6700 0006                463      BEQ         CAT_ATTACKS
+000013E2  6600 0018                464      BNE         CAT_SAFE
+000013E6                           465      
+000013E6                           466  *--------------------CAT ATTACKS SUBROUTINE--------------------------------
+000013E6                           467  CAT_ATTACKS:    
+000013E6  43F9 00001FF8            468      LEA         CAT_ATTACKS_MSG, A1
+000013EC  103C 000D                469      MOVE.B      #13, D0
+000013F0  4E4F                     470      TRAP        #15
+000013F2                           471      
+000013F2  0403 000A                472      SUB.B       #10, D3         ; DEDUCT 10 FLAVOUR
+000013F6  5B04                     473      SUB.B       #5, D4          ; DEDUCT 5 FRESHNESS
+000013F8                           474      
+000013F8  6000 0012                475      BRA         FINAL_COUNT        ; OTHERWISE CAT DOESN'T DO ANYTHING
+000013FC                           476  
+000013FC                           477  *--------------------CAT SAFE SUBROUTINE--------------------------------    
+000013FC                           478  CAT_SAFE:    
+000013FC  43F9 0000208B            479      LEA         CAT_SAFE_MSG, A1
+00001402  103C 000D                480      MOVE.B      #13, D0
+00001406  4E4F                     481      TRAP        #15 
+00001408                           482      
+00001408  6000 0002                483      BRA         FINAL_COUNT       ; OTHERWISE CAT DOESN'T DO ANYTHING
+0000140C                           484  
+0000140C                           485      
+0000140C                           486  *--------------------FINAL COUNT SUBROUTINE--------------------------------   
+0000140C                           487  FINAL_COUNT:
+0000140C  6100 FED4                488      BSR         CLEAR_SCREEN
+00001410                           489      
+00001410  43F9 00002276            490      LEA         ENDING, A1
+00001416  103C 000D                491      MOVE.B      #13, D0
+0000141A  4E4F                     492      TRAP        #15
+0000141C                           493      
+0000141C  6100 FEDA                494      BSR         PRESS_KEY
+00001420  6100 FEC0                495      BSR         CLEAR_SCREEN
+00001424                           496      
+00001424  1C03                     497      MOVE.B      D3, D6
+00001426  DC04                     498      ADD.B       D4, D6
+00001428                           499      
+00001428  BC3C 0046                500      CMP.B       #PERFECT_BOWL, D6
+0000142C  6200 000E                501      BHI         PERFECT_ENDING
+00001430                           502      
+00001430  BC3C 0032                503      CMP.B       #DECENT_BOWL, D6
+00001434  6200 0036                504      BHI         DECENT_ENDING
+00001438                           505      
+00001438  6000 0050                506      BRA         BAD_ENDING
+0000143C                           507      
+0000143C                           508  *--------------------FINAL COUNT SUBROUTINE--------------------------------- 
+0000143C                           509  PERFECT_ENDING:
+0000143C  6100 FEA4                510      BSR         CLEAR_SCREEN
+00001440                           511      
+00001440  43F9 000023D0            512      LEA         PERFECT_MSG, A1
+00001446  103C 000D                513      MOVE.B      #13, D0
+0000144A  4E4F                     514      TRAP        #15
+0000144C                           515      
+0000144C  103C 000B                516      MOVE.B      #11, D0
+00001450  323C 1B1E                517      MOVE.W      #$1B1E, D1
+00001454  4E4F                     518      TRAP        #15
+00001456                           519      
+00001456  43F9 0000152E            520      LEA         PRESS_KEY_MSG, A1
+0000145C  103C 000E                521      MOVE.B      #14, D0
+00001460  4E4F                     522      TRAP        #15
+00001462                           523      
+00001462  103C 0005                524      MOVE.B      #5, D0
+00001466  4E4F                     525      TRAP        #15
+00001468                           526      
+00001468  FFFF FFFF                527      SIMHALT
+0000146C                           528      
+0000146C                           529  *--------------------FINAL COUNT SUBROUTINE--------------------------------- 
+0000146C                           530  DECENT_ENDING:
+0000146C  6100 FE74                531      BSR         CLEAR_SCREEN
+00001470                           532      
+00001470  43F9 000025A5            533      LEA         DECENT_MSG, A1
+00001476  103C 000D                534      MOVE.B      #13, D0
+0000147A  4E4F                     535      TRAP        #15
+0000147C                           536      
+0000147C  6100 FE7A                537      BSR         PRESS_KEY
+00001480                           538      
+00001480  103C 0005                539      MOVE.B      #5, D0              ; WAIT FOR USER TO PRESS KEY
+00001484  4E4F                     540      TRAP        #15    
+00001486                           541      
+00001486  6000 FBB0                542      BRA         GAME_LOOP
+0000148A                           543  
+0000148A                           544  *--------------------FINAL COUNT SUBROUTINE---------------------------------  
+0000148A                           545  BAD_ENDING:   
+0000148A  6100 FE56                546      BSR         CLEAR_SCREEN
+0000148E                           547      
+0000148E  43F9 00002723            548      LEA         BAD_MSG, A1
+00001494  103C 000D                549      MOVE.B      #13, D0
+00001498  4E4F                     550      TRAP        #15
+0000149A                           551      
+0000149A  103C 000B                552      MOVE.B      #11, D0
+0000149E  323C 1B1E                553      MOVE.W      #$1B1E, D1
+000014A2  4E4F                     554      TRAP        #15
+000014A4                           555      
+000014A4  43F9 0000152E            556      LEA         PRESS_KEY_MSG, A1
+000014AA  103C 000E                557      MOVE.B      #14, D0                 ; TASK 14 - NO LINE FEED
+000014AE  4E4F                     558      TRAP        #15
+000014B0                           559      
+000014B0  103C 0005                560      MOVE.B      #5, D0
+000014B4  4E4F                     561      TRAP        #15
+000014B6                           562      
+000014B6  FFFF FFFF                563      SIMHALT
+000014BA                           564  
+000014BA= 57 65 6C 63 6F 6D ...    565  ASK_NAME:       DC.B        'Welcome stranger, please state your name'
+000014E2= 0D 0A 00                 566                  DC.B        $0D, $0A, 0
+000014E5                           567  
+000014E6                           568  NAME:           DS.W        30                                ; DEFINE STORAGE TO A MAX OF 30
+00001522                           569  
+00001522= 00                       570  COUNTER:        DC.B        0                                   ;RANDOM EVENT COUNTER
+00001523                           571  
+00001523= 47 72 65 65 74 69 ...    572  WELCOME_MSG:    DC.B        'Greetings ',0 
+0000152E                           573  
+0000152E= 50 52 45 53 53 20 ...    574  PRESS_KEY_MSG:  DC.B        'PRESS ANY KEY TO CONTINUE',0 
+00001548                           575                              
+00001548= 0D 0A                    576  INTRODUCTION:   DC.B        $0D, $0A
+0000154A= 3C 3E 3C 3E 3C 3E ...    577                  DC.B        '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><'
+00001599= 0D 0A                    578                  DC.B        $0D, $0A
+0000159B= 0D 0A                    579                  DC.B        $0D, $0A
+0000159D= 42 52 45 41 4B 49 ...    580                  DC.B        'BREAKING NEWS: YOU HAVE BEEN KIDNAPPED BY A COSMIC ENTITY!'
+000015D7= 0D 0A                    581                  DC.B        $0D, $0A
+000015D9= 54 48 45 20 47 4F ...    582                  DC.B        'THE GOOD NEWS: HE HAS NOT EATEN YOU'
+000015FC= 0D 0A                    583                  DC.B        $0D, $0A
+000015FE= 54 48 45 20 42 41 ...    584                  DC.B        'THE BAD NEWS: HE IS HUNGRY AND YOU ARE THE CHEF'
+0000162D= 0D 0A                    585                  DC.B        $0D, $0A
+0000162F= 43 4F 4F 4B 20 57 ...    586                  DC.B        'COOK WELL, AND YOU MAY LIVE TO SEE ANOTHER DAY'
+0000165D= 0D 0A                    587                  DC.B        $0D, $0A 
+0000165F= 43 4F 4F 4B 20 42 ...    588                  DC.B        'COOK BADLY...WELL, IT WAS NICE KNOWING YOU'
+00001689= 0D 0A                    589                  DC.B        $0D, $0A
+0000168B= 28 54 48 45 20 43 ...    590                  DC.B        '(THE CAT IS WATCHING. THE CAT IS ALWAYS WATCHING)'
+000016BC= 0D 0A                    591                  DC.B        $0D, $0A
+000016BE= 0D 0A 00                 592                  DC.B        $0D, $0A, 0
+000016C1                           593  
+000016C1= 20 20 20 20 20 20 ...    594  LARDER_MSG:         DC.B    '                     <><><><><><><><><><><><><><><><><><><>  ' 
+000016FE= 0D 0A                    595                      DC.B    $0D,$0A
+00001700= 20 20 20 20 20 20 ...    596                      DC.B    '                        TRIAL ONE - RICE TO THE OCCASION      '
+0000173E= 0D 0A                    597                      DC.B    $0D,$0A    
+00001740= 20 20 20 20 20 20 ...    598                      DC.B    '                     <><><><><><><><><><><><><><><><><><><>  '
+0000177D= 0D 0A                    599                      DC.B    $0D,$0A  
+0000177F= 0D 0A                    600                      DC.B    $0D,$0A 
+00001781= 57 48 41 54 20 47 ...    601                      DC.B    'WHAT GRAIN WILL YOU COOK?'
+0000179A= 0D 0A                    602                      DC.B    $0D, $0A
+0000179C= 0D 0A                    603                      DC.B    $0D, $0A
+0000179E= 52 49 43 45 20 28 ...    604                      DC.B    'RICE (1) OR RAMEN NOODLES (2)'
+000017BB= 0D 0A 00                 605                      DC.B    $0D, $0A, 0
+000017BE                           606                  
+000017BE= 0D 0A                    607  RICE_MSG:           DC.B    $0D, $0A
+000017C0= 41 48 2C 20 52 49 ...    608                      DC.B    'AH, RICE. A CLASSIC! SIMPLE, ELEGANT, SOME MIGHT SAY BRAVE'
+000017FA= 0D 0A                    609                      DC.B    $0D, $0A
+000017FC= 54 48 45 20 43 4F ...    610                      DC.B    'THE COSMIC ENTITY NODS APPROVINGLY (PROBABLY?)'
+0000182A= 0D 0A                    611                      DC.B    $0D, $0A
+0000182C= 2B 20 31 30 20 46 ...    612                      DC.B    '+ 10 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
+00001856= 0D 0A                    613                      DC.B    $0D, $0A
+00001858= 0D 0A 00                 614                      DC.B    $0D, $0A, 0
+0000185B                           615  
+0000185B= 0D 0A                    616  NOODLES_MSG:        DC.B    $0D, $0A
+0000185D= 52 41 4D 45 4E 20 ...    617                      DC.B    'RAMEN NOODLES! A BOLD CHOICE FOR A KIDNAPPED CHEF'
+0000188E= 0D 0A                    618                      DC.B    $0D, $0A
+00001890= 54 48 45 20 45 4E ...    619                      DC.B    'THE ENTITYS EYEBROWS RAISE APPROXIMATELY 3 INCHES'
+000018C1= 0D 0A                    620                      DC.B    $0D, $0A
+000018C3= 2B 20 31 35 20 46 ...    621                      DC.B    '+ 15 FLAVOUR POINTS, + 5 FRESHNESS POINTS'
+000018EC= 0D 0A                    622                      DC.B    $0D, $0A
+000018EE= 0D 0A 00                 623                      DC.B    $0D, $0A, 0
+000018F1                           624                  
+000018F1= 49 4E 56 41 4C 49 ...    625  FAIL_MSG:           DC.B    'INVALID CHOICE'
+000018FF= 0D 0A 00                 626                      DC.B    $0D, $0A,0
+00001902                           627  
+00001902= 0D 0A                    628  RICE_SALMON_MSG:    DC.B    $0D, $0A
+00001904= 52 49 43 45 20 41 ...    629                      DC.B    'RICE AND SALMON? LOOK AT YOU BEING ALL FANCY!'
+00001931= 0D 0A                    630                      DC.B    $0D, $0A
+00001933= 54 48 45 20 45 4E ...    631                      DC.B    'THE ENTITY LEANS FORWARD WITH SUSPICIOUS INTEREST'
+00001964= 0D 0A                    632                      DC.B    $0D, $0A
+00001966= 46 4C 41 56 4F 55 ...    633                      DC.B    'FLAVOUR POINTS +15, + 10 FRESHNESS POINTS'
+0000198F= 0D 0A                    634                      DC.B    $0D, $0A                    
+00001991= 0D 0A 00                 635                      DC.B    $0D, $0A, 0
+00001994                           636                      
+00001994= 0D 0A                    637  RICE_EGG_MSG:       DC.B    $0D, $0A
+00001996= 52 49 43 45 20 41 ...    638                      DC.B    'RICE AND EGG. A HUMBLE CHOICE (TOO HUMBLE PERHAPS?)'
+000019C9= 0D 0A                    639                      DC.B    $0D, $0A
+000019CB= 4E 4F 54 20 49 4E ...    640                      DC.B    'NOT INSPIRED. NOT TERRIBLE EITHER'
+000019EC= 0D 0A                    641                      DC.B    $0D, $0A
+000019EE= 54 48 45 20 45 4E ...    642                      DC.B    'THE ENTITY TILTS HIS HEAD, SURVEYING'
+00001A12= 0D 0A                    643                      DC.B    $0D, $0A
+00001A14= 22 49 4E 54 45 52 ...    644                      DC.B    '"INTERESTING." HE SAYS, IN A TONE THAT SUGGESTS IT IS ANYTHING BUT'
+00001A56= 0D 0A                    645                      DC.B    $0D, $0A
+00001A58= 2B 35 20 46 4C 41 ...    646                      DC.B    '+5 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
+00001A80= 0D 0A                    647                      DC.B    $0D, $0A                    
+00001A82= 0D 0A 00                 648                      DC.B    $0D, $0A, 0
+00001A85                           649  
+00001A85= 20 20 20 20 20 20 ...    650  FRIDGE_MSG:         DC.B    '                  <><><><><><><><><><><><><><><><><><><><><><>  '
+00001AC5= 0D 0A                    651                      DC.B    $0D,$0A
+00001AC7= 20 20 20 20 20 20 ...    652                      DC.B    '                     TRIAL TWO - EGG-CELLENT CHOICES AWAIT'
+00001B01= 0D 0A                    653                      DC.B    $0D,$0A
+00001B03= 20 20 20 20 20 20 ...    654                      DC.B    '                  <><><><><><><><><><><><><><><><><><><><><><>  '
+00001B43= 0D 0A                    655                      DC.B    $0D,$0A
+00001B45= 0D 0A                    656                      DC.B    $0D, $0A
+00001B47= 59 4F 55 20 4E 45 ...    657                      DC.B    'YOU NEED A PROTEIN!'
+00001B5A= 0D 0A                    658                      DC.B    $0D, $0A
+00001B5C= 53 41 4C 4D 4F 4E ...    659                      DC.B    'SALMON (1) OR EGG (2)'
+00001B71= 0D 0A                    660                      DC.B    $0D, $0A                    
+00001B73= 0D 0A 00                 661                      DC.B    $0D, $0A, 0
+00001B76                           662                      
+00001B76= 0D 0A                    663  NOODLES_SALMON_MSG: DC.B    $0D, $0A
+00001B78= 4E 4F 4F 44 4C 45 ...    664                      DC.B    'NOODLES AND SALMON... THE ENTITY SQUINTS'
+00001BA0= 0D 0A                    665                      DC.B    $0D, $0A
+00001BA2= 4F 4E 45 20 4F 46 ...    666                      DC.B    'ONE OF HIS SEVENTEEN EYES TWITCHES SLIGHTLY'
+00001BCD= 0D 0A                    667                      DC.B    $0D, $0A
+00001BCF= 2D 35 20 46 4C 41 ...    668                      DC.B    '-5 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
+00001BF7= 0D 0A 00                 669                      DC.B    $0D, $0A, 0
+00001BFA                           670                      
+00001BFA= 0D 0A                    671  NOODLES_EGG_MSG:    DC.B    $0D, $0A
+00001BFC= 52 41 4D 45 4E 20 ...    672                      DC.B    'RAMEN AND EGG IS A SACRED COMBINATION, KNOWN ACROSS COUNTLESS DIMENSIONS!'
+00001C45= 0D 0A                    673                      DC.B    $0D, $0A
+00001C47= 54 48 45 20 45 4E ...    674                      DC.B    'THE ENTITYS SEVENTEEN EYES LIGHT UP WITH GLEE'
+00001C74= 0D 0A                    675                      DC.B    $0D, $0A
+00001C76= 2B 35 20 46 4C 41 ...    676                      DC.B    '+5 FLAVOUR POINTS, +10 FRESHNESS'
+00001C96= 0D 0A                    677                      DC.B    $0D, $0A                    
+00001C98= 0D 0A 00                 678                      DC.B    $0D, $0A, 0
+00001C9B                           679      
+00001C9B= 20 20 20 20 20 20 ...    680  SPICE_MSG:          DC.B    '                   <><><><><><><><><><><><><><><><><><><><><><><>    '
+00001CE0= 0D 0A                    681                      DC.B    $0D,$0A
+00001CE2= 20 20 20 20 20 20 ...    682                      DC.B    '                     TRIAL THREE ~ SOY YOU THINK YOU CAN COOK  '
+00001D21= 0D 0A                    683                      DC.B    $0D,$0A
+00001D23= 20 20 20 20 20 20 ...    684                      DC.B    '                   <><><><><><><><><><><><><><><><><><><><><><><>    '
+00001D68= 0D 0A                    685                      DC.B    $0D, $0A
+00001D6A= 0D 0A                    686                      DC.B    $0D, $0A
+00001D6C= 53 4F 59 20 53 41 ...    687                      DC.B    'SOY SAUCE (1) OR WASABI(2)'
+00001D86= 0D 0A                    688                      DC.B    $0D, $0A                    
+00001D88= 0D 0A 00                 689                      DC.B    $0D, $0A, 0  
+00001D8B                           690      
+00001D8B= 0D 0A                    691  SOY_SAUCE_MSG:      DC.B    $0D, $0A
+00001D8D= 53 4F 59 20 53 41 ...    692                      DC.B    'SOY SAUCE IS ALWAYS A GOOD CHOICE'
+00001DAE= 0D 0A                    693                      DC.B    $0D, $0A
+00001DB0= 2B 20 31 30 20 46 ...    694                      DC.B    '+ 10 FLAVOUR POINTS, + 5 FRESHNESS POINTS'
+00001DD9= 0D 0A                    695                      DC.B    $0D, $0A                    
+00001DDB= 0D 0A 00                 696                      DC.B    $0D, $0A, 0                
+00001DDE                           697  
+00001DDE= 0D 0A                    698  WASABI_BONUS_MSG:   DC.B    $0D, $0A
+00001DE0= 46 4F 52 54 55 4E ...    699                      DC.B    'FORTUNE FAVOURS THE BOLD, AND YOU ARE VERY BOLD' 
+00001E0F= 0D 0A                    700                      DC.B    $0D, $0A
+00001E11= 4F 52 20 50 4F 54 ...    701                      DC.B    'OR POTENTIALLY RECKLESS. THE ENTITY IS UNSURE'
+00001E3E= 0D 0A                    702                      DC.B    $0D, $0A
+00001E40= 2B 20 31 35 20 46 ...    703                      DC.B    '+ 15 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
+00001E6A= 0D 0A                    704                      DC.B    $0D, $0A                    
+00001E6C= 0D 0A 00                 705                      DC.B    $0D, $0A, 0
+00001E6F                           706                      
+00001E6F= 0D 0A                    707  WASABI_MSG:         DC.B    $0D, $0A
+00001E71= 41 20 42 4F 4C 44 ...    708                      DC.B    'A BOLD CHOICE, BUT A GOOD ONE'
+00001E8E= 0D 0A                    709                      DC.B    $0D, $0A
+00001E90= 2B 20 35 20 46 4C ...    710                      DC.B    '+ 5 FLAVOUR POINTS, + 10 FRESHNESS POINTS'
+00001EB9= 0D 0A                    711                      DC.B    $0D, $0A                    
+00001EBB= 0D 0A 00                 712                      DC.B    $0D, $0A, 0                    
+00001EBE                           713                      
+00001EBE                           714                      
+00001EBE= 0D 0A                    715  WASABI_PENALTY_MSG: DC.B    $0D, $0A
+00001EC0= 54 48 45 20 57 41 ...    716                      DC.B    'THE WASABI HAS DECLARED WAR ON THE SALMON'    
+00001EE9= 0D 0A                    717                      DC.B    $0D, $0A
+00001EEB= 54 48 45 20 53 41 ...    718                      DC.B    'THE SALMON IS LOSING'
+00001EFF= 0D 0A                    719                      DC.B    $0D, $0A
+00001F01= 54 48 45 20 45 4E ...    720                      DC.B    'THE ENTITY WATCHES THE CHAOS UNFOLD'
+00001F24= 0D 0A                    721                      DC.B    $0D, $0A
+00001F26= 2D 20 31 30 20 46 ...    722                      DC.B    '- 10 FLAVOUR POINTS, + 5 FRESHNESS POINTS'
+00001F4F= 0D 0A                    723                      DC.B    $0D, $0A                    
+00001F51= 0D 0A 00                 724                      DC.B    $0D, $0A, 0  
+00001F54                           725  
+00001F54= 0D 0A                    726  SOY_BONUS_MSG:      DC.B    $0D, $0A
+00001F56= 41 20 50 45 52 46 ...    727                      DC.B    'A PERFECT PAIRING. CIVILISED. REFINED. ALMOST CERTAINLY CORRECT'
+00001F95= 0D 0A                    728                      DC.B    $0D, $0A
+00001F97= 49 54 20 4D 41 4B ...    729                      DC.B    'IT MAKES A SOUND THAT COULD BE CONSIDERED AGREEABLE'
+00001FCA= 0D 0A                    730                      DC.B    $0D, $0A
+00001FCC= 2B 20 32 30 20 46 ...    731                      DC.B    '+ 20 FLAVOUR POINTS, + 5 FRESHNESS POINTS'
+00001FF5= 0D 0A 00                 732                      DC.B    $0D, $0A, 0 
+00001FF8                           733  
+00001FF8= 0D 0A                    734  CAT_ATTACKS_MSG:    DC.B    $0D, $0A
+00001FFA= 43 41 54 2D 41 53 ...    735                      DC.B    'CAT-ASTROPHE STRIKES'
+0000200E= 0D 0A                    736                      DC.B    $0D, $0A
+00002010= 54 48 45 20 43 41 ...    737                      DC.B    'THE CAT HAS KNOCKED THE MEAL OFF THE COUNTER'
+0000203C= 0D 0A                    738                      DC.B    $0D, $0A
+0000203E= 48 45 20 4D 41 4B ...    739                      DC.B    'HE MAKES EYE CONTACT WITH YOU AS HE DOES IT'
+00002069= 0D 0A                    740                      DC.B    $0D, $0A
+0000206B= 48 45 20 44 4F 45 ...    741                      DC.B    'HE DOES NOT BREAK EYE CONTACT'
+00002088= 0D 0A 00                 742                      DC.B    $0D, $0A, 0
+0000208B                           743  
+0000208B= 0D 0A                    744  CAT_SAFE_MSG:       DC.B    $0D, $0A
+0000208D= 54 48 45 20 43 41 ...    745                      DC.B    'THE CAT SNIFFS THE MEAL WITH GREAT SUSPICION'
+000020B9= 0D 0A                    746                      DC.B    $0D, $0A
+000020BB= 54 4F 44 41 59 2C ...    747                      DC.B    'TODAY, YOU HAVE BEEN FOUND ACCEPTABLE.' 
+000020E1= 0D 0A                    748                      DC.B    $0D, $0A
+000020E3= 0D 0A 00                 749                      DC.B    $0D, $0A, 0
+000020E6                           750                      
+000020E6= 0D 0A                    751  MYSTERY_EVENT_MSG:  DC.B    $0D, $0A
+000020E8= 41 20 4D 59 53 54 ...    752                      DC.B    'A MYSTERIOUS INGREDIENT HAS APPEARED ON YOUR COUNTER'
+0000211C= 0D 0A                    753                      DC.B    $0D, $0A 
+0000211E= 49 54 20 47 4C 4F ...    754                      DC.B    'IT GLOWS WITH COSMIC ENERGY'
+00002139= 0D 0A                    755                      DC.B    $0D, $0A 
+0000213B= 41 44 44 20 49 54 ...    756                      DC.B    'ADD IT TO YOUR DISH? YES (1) OR NO (2)'
+00002161= 0D 0A                    757                      DC.B    $0D, $0A 
+00002163= 0D 0A 00                 758                      DC.B    $0D, $0A, 0
+00002166                           759  
+00002166= 0D 0A                    760  MYSTERY_BONUS_MSG:  DC.B    $0D, $0A 
+00002168= 57 48 41 54 45 56 ...    761                      DC.B    'WHATEVER THAT WAS, IT WORKED'
+00002184= 0D 0A                    762                      DC.B    $0D, $0A 
+00002186= 2B 31 35 20 46 4C ...    763                      DC.B    '+15 FLAVOUR, + 15 FRESHNESS'
+000021A1= 0D 0A                    764                      DC.B    $0D, $0A
+000021A3= 0D 0A 00                 765                      DC.B    $0D, $0A, 0 
+000021A6                           766  
+000021A6= 0D 0A                    767  MYSTERY_PENALTY_MSG:    DC.B    $0D, $0A
+000021A8= 54 48 45 20 44 49 ...    768                          DC.B    'THE DISH LETS OUT A SMALL POP'
+000021C5= 0D 0A                    769                          DC.B    $0D, $0A
+000021C7= 54 48 45 20 44 49 ...    770                          DC.B    'THE DISH SMELLS DIFFERENT NOW'
+000021E4= 0D 0A                    771                          DC.B    $0D, $0A
+000021E6= 4E 4F 54 20 42 45 ...    772                          DC.B    'NOT BETTER. JUST DIFFERENT'
+00002200= 0D 0A                    773                          DC.B    $0D, $0A
+00002202= 2D 31 30 20 46 4C ...    774                          DC.B    '-10 FLAVOUR, -10 FRESHNESS'
+0000221C= 0D 0A 00                 775                          DC.B    $0D, $0A, 0
+0000221F                           776                          
+0000221F= 0D 0A                    777  MYSTERY_IGNORE_MSG:     DC.B    $0D, $0A
+00002221= 41 20 57 49 53 45 ...    778                          DC.B    'A WISE CHOICE'
+0000222E= 0D 0A                    779                          DC.B    $0D, $0A
+00002230= 4F 52 20 41 20 43 ...    780                          DC.B    'OR A COWARDLY ONE'
+00002241= 0D 0A                    781                          DC.B    $0D, $0A
+00002243= 54 48 45 20 55 4E ...    782                          DC.B    'THE UNIVERSE WILL NEVER KNOW'
+0000225F= 0D 0A                    783                          DC.B    $0D, $0A
+00002261= 4E 45 49 54 48 45 ...    784                          DC.B    'NEITHER WILL YOU'
+00002271= 0D 0A                    785                          DC.B    $0D, $0A
+00002273= 0D 0A 00                 786                          DC.B    $0D, $0A, 0
+00002276                           787                   
+00002276                           788                      
+00002276= 3C 3E 3C 3E 3C 3E ...    789  ENDING:             DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+000022C4= 0D 0A                    790                      DC.B    $0D, $0A  
+000022C6= 0D 0A                    791                      DC.B    $0D, $0A  
+000022C8= 54 48 45 20 45 4E ...    792                      DC.B    'THE ENTITY LIFTS THE BOWL SLOWLY'
+000022E8= 0D 0A                    793                      DC.B    $0D, $0A  
+000022EA= 48 45 20 45 58 41 ...    794                      DC.B    'HE EXAMINES IT FROM EVERY ANGLE WITH HIS SEVENTEEN EYES'
+00002321= 0D 0A                    795                      DC.B    $0D, $0A           
+00002323= 54 48 45 20 43 41 ...    796                      DC.B    'THE CAT HOLDS ITS BREATH'
+0000233B= 0D 0A                    797                      DC.B    $0D, $0A   
+0000233D= 41 53 20 44 4F 20 ...    798                      DC.B    'AS DO YOU'
+00002346= 0D 0A                    799                      DC.B    $0D, $0A
+00002348= 45 56 45 4E 20 54 ...    800                      DC.B    'EVEN THE UNIVERSE HOLDS ITS BREATH'
+0000236A= 0D 0A                    801                      DC.B    $0D, $0A
+0000236C= 48 45 20 54 41 4B ...    802                      DC.B    'HE TAKES A BITE'
+0000237B= 0D 0A                    803                      DC.B    $0D, $0A
+0000237D= 0D 0A                    804                      DC.B    $0D, $0A  
+0000237F= 3C 3E 3C 3E 3C 3E ...    805                      DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+000023CD= 0D 0A 00                 806                      DC.B    $0D, $0A, 0            
+000023D0                           807                      
+000023D0                           808                      
+000023D0= 3C 3E 3C 3E 3C 3E ...    809  PERFECT_MSG:        DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+0000241E= 0D 0A                    810                      DC.B    $0D, $0A
+00002420= 0D 0A                    811                      DC.B    $0D, $0A
+00002422= 54 48 45 20 45 4E ...    812                      DC.B    'THE ENTITY SETS DOWN HIS MEAL WITH A CLANG' 
+0000244C= 0D 0A                    813                      DC.B    $0D, $0A
+0000244E= 41 20 53 49 4E 47 ...    814                      DC.B    'A SINGLE TEAR ROLLS DOWN HIS (COSMIC) FACE'
+00002478= 0D 0A                    815                      DC.B    $0D, $0A
+0000247A= 22 49 4E 20 46 4F ...    816                      DC.B    '"IN FOUR THOUSAND YEARS," HE WHISPERS "THIS IS MY FAVOURITE MEAL..."'
+000024BE= 0D 0A                    817                      DC.B    $0D, $0A
+000024C0= 48 45 20 43 4F 4D ...    818                      DC.B    'HE COMPOSES HIMSELF'
+000024D3= 0D 0A                    819                      DC.B    $0D, $0A
+000024D5= 22 59 4F 55 20 4D ...    820                      DC.B    '"YOU MAY CALL ME GERALD"'
+000024ED= 0D 0A                    821                      DC.B    $0D, $0A
+000024EF= 22 4E 4F 57 20 4C ...    822                      DC.B    '"NOW LEAVE, BEFORE I CHANGE MY MIND!"'
+00002514= 0D 0A                    823                      DC.B    $0D, $0A
+00002516= 48 45 20 53 4F 42 ...    824                      DC.B    'HE SOBS AS HE DESCENDS INTO THE DEPTHS FROM WHENCE HE CAME'
+00002550= 0D 0A                    825                      DC.B    $0D, $0A
+00002552= 0D 0A                    826                      DC.B    $0D, $0A                    
+00002554= 3C 3E 3C 3E 3C 3E ...    827                      DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+000025A2= 0D 0A 00                 828                      DC.B    $0D, $0A, 0 
+000025A5                           829                      
+000025A5                           830  
+000025A5= 3C 3E 3C 3E 3C 3E ...    831  DECENT_MSG:         DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+000025F3= 0D 0A                    832                      DC.B    $0D, $0A
+000025F5= 0D 0A                    833                      DC.B    $0D, $0A
+000025F7= 54 48 45 20 45 4E ...    834                      DC.B    'THE ENTITY POKES THE BOWL'
+00002610= 0D 0A                    835                      DC.B    $0D, $0A 
+00002612= 48 45 20 54 41 4B ...    836                      DC.B    'HE TAKES ONE BITE. THEN ANOTHER'
+00002631= 0D 0A                    837                      DC.B    $0D, $0A 
+00002633= 22 59 4F 55 20 48 ...    838                      DC.B    '"YOU HAVE POTENTIAL," HE SAYS, BUT POTENTIAL IS NOT ENOUGH'
+0000266D= 0D 0A                    839                      DC.B    $0D, $0A
+0000266F= 22 49 20 57 49 4C ...    840                      DC.B    '"I WILL RETURN TOMORROW. I HOPE YOU WILL DO BETTER"'
+000026A2= 0D 0A                    841                      DC.B    $0D, $0A
+000026A4= 54 48 45 20 43 41 ...    842                      DC.B    'THE CAT FINISHES THE MEAL. THE CAT ENJOYS IT'
+000026D0= 0D 0A                    843                      DC.B    $0D, $0A 
+000026D2= 0D 0A                    844                      DC.B    $0D, $0A                 
+000026D4= 3C 3E 3C 3E 3C 3E ...    845                      DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>',0     
+00002723                           846  
+00002723= 3C 3E 3C 3E 3C 3E ...    847  BAD_MSG:            DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+00002771= 0D 0A                    848                      DC.B    $0D, $0A
+00002773= 0D 0A                    849                      DC.B    $0D, $0A
+00002775= 54 48 45 20 45 4E ...    850                      DC.B    'THE ENTITY STARES AT THE BOWL FOR A VERY LONG TIME'
+000027A7= 0D 0A                    851                      DC.B    $0D, $0A
+000027A9= 54 48 45 20 43 41 ...    852                      DC.B    'THE CAT BACKS AWAY SLOWLY'
+000027C2= 0D 0A                    853                      DC.B    $0D, $0A 
+000027C4= 45 56 45 4E 20 54 ...    854                      DC.B    'EVEN THE CAT KNOWS'
+000027D6= 0D 0A                    855                      DC.B    $0D, $0A
+000027D8= 22 49 20 48 41 56 ...    856                      DC.B    '"I HAVE CONSUMED GALAXIES," THE ENTITY SAYS QUIETLY'
+0000280B= 0D 0A                    857                      DC.B    $0D, $0A
+0000280D= 22 41 4E 44 20 54 ...    858                      DC.B    '"AND THIS IS SOMEHOW WORSE"'
+00002828= 0D 0A                    859                      DC.B    $0D, $0A
+0000282A= 59 4F 55 52 20 55 ...    860                      DC.B    'YOUR UNIVERSE COLLAPSES. THE CAT SURVIVES'
+00002853= 0D 0A                    861                      DC.B    $0D, $0A
+00002855= 54 48 45 20 43 41 ...    862                      DC.B    'THE CAT ALWAYS SURVIVES'
+0000286C= 0D 0A                    863                      DC.B    $0D, $0A
+0000286E= 0D 0A                    864                      DC.B    $0D, $0A                   
+00002870= 3C 3E 3C 3E 3C 3E ...    865                      DC.B    '<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>'
+000028BE= 0D 0A 00                 866                      DC.B    $0D, $0A, 0    
+000028C1                           867  
+000028C1= 0D 0A                    868  NEW_GAME_MSG:       DC.B    $0D, $0A
+000028C3= 41 20 4E 45 57 20 ...    869                      DC.B    'A NEW DAY DAWNS...'
+000028D5= 0D 0A                    870                      DC.B    $0D, $0A
+000028D7= 0D 0A                    871                      DC.B    $0D, $0A
+000028D9= 54 52 59 20 41 47 ...    872                      DC.B    'TRY AGAIN. HOPE FOR BETTER TIMES'
+000028F9= 0D 0A 00                 873                      DC.B    $0D, $0A, 0                                  
+000028FC                           874                  
+000028FC                           875      
+000028FC                           876      END         START                ; last line of source
+
+No errors detected
+No warnings generated
+
+
+SYMBOL TABLE INFORMATION
+Symbol-name         Value
+-------------------------
+ASK_NAME            14BA
+BAD_BOWL            1E
+BAD_ENDING          148A
+BAD_MSG             2723
+CAT_ATTACKS         13E6
+CAT_ATTACKS_MSG     1FF8
+CAT_EVENT           13CA
+CAT_SAFE            13FC
+CAT_SAFE_MSG        208B
+CLEAR_SCREEN        12E2
+COUNTER             1522
+DECENT_BOWL         32
+DECENT_ENDING       146C
+DECENT_MSG          25A5
+ENDING              2276
+FAIL_MSG            18F1
+FINAL_COUNT         140C
+FRIDGE_MSG          1A85
+GAME_LOOP           1038
+INTRODUCTION        1548
+LARDER              1088
+LARDER_FAIL_PATH    12A2
+LARDER_MSG          16C1
+MYSTERY_ADD         1356
+MYSTERY_BONUS       1372
+MYSTERY_BONUS_MSG   2166
+MYSTERY_EVENT       131C
+MYSTERY_EVENT_MSG   20E6
+MYSTERY_IGNORE      13B2
+MYSTERY_IGNORE_MSG  221F
+MYSTERY_INGREDIENT  1338
+MYSTERY_PENALTY     1392
+MYSTERY_PENALTY_MSG  21A6
+NAME                14E6
+NEW_GAME_MSG        28C1
+NOODLES             10F0
+NOODLES_EGG         1198
+NOODLES_EGG_MSG     1BFA
+NOODLES_FRIDGE_FAIL  12C2
+NOODLES_INPUT       1118
+NOODLES_MSG         185B
+NOODLES_SALMON      1178
+NOODLES_SALMON_MSG  1B76
+PERFECT_BOWL        46
+PERFECT_ENDING      143C
+PERFECT_MSG         23D0
+PRESS_KEY           12F8
+PRESS_KEY_MSG       152E
+RICE                10AE
+RICE_EGG            1156
+RICE_EGG_MSG        1994
+RICE_FRIDGE_FAIL    12B2
+RICE_INPUT          10D6
+RICE_MSG            17BE
+RICE_SALMON         1132
+RICE_SALMON_MSG     1902
+SOY_BONUS           120E
+SOY_BONUS_MSG       1F54
+SOY_SAUCE           11E0
+SOY_SAUCE_MSG       1D8B
+SPICE               11BA
+SPICE_FAIL_PATH     12D2
+SPICE_INPUT         11C6
+SPICE_MSG           1C9B
+START               1000
+WASABI              122C
+WASABI_BONUS        1264
+WASABI_BONUS_MSG    1DDE
+WASABI_MSG          1E6F
+WASABI_PENALTY      1284
+WASABI_PENALTY_MSG  1EBE
+WELCOME             1050
+WELCOME_MSG         1523
