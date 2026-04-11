@@ -1,0 +1,10 @@
+EXECUTABLE=IntegratingCandASM
+
+all:
+	nasm -f elf sub.asm -o sub.o -l starter.lst
+	gcc -m32 -c main_sub.c
+	gcc -m32 main_sub.o sub.o -o $(EXECUTABLE)
+
+#Clean folder
+clean:
+	rm -rf *o *.lst $(EXECUTABLE)
